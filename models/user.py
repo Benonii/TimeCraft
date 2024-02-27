@@ -2,7 +2,7 @@
 ''' This module contains the class User '''
 
 from models.basemodel import BaseModel, Base
-from slqalchemy import Column, String, Float, Integer
+from sqlalchemy import Column, String, Float, Integer
 
 
 class User(BaseModel, Base):

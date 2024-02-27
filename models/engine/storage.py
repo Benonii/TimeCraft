@@ -14,7 +14,7 @@ from models.task import Task
 from models.dailylog import DailyLog
 
 
-class DBStorage:
+class Storage:
     ''' This class defines handles the storage of our data '''
 
     __engine = None
@@ -22,7 +22,7 @@ class DBStorage:
 
     def __init__(self):
         ''' Insantization '''
-        env = os.environ.get('HBNB_ENV')
+        env = os.environ.get('TC_ENV')
         self.__engine = create_engine('mysql+mysqldb:'\
                                       +'//tc_dev:tc_dev_pwd_4796@localhost'\
                                       +'/tc_dev_db')
