@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-from models.basemodel BaseModel, Base
-from sqlalchemy import Column, String, Float, Integer
+from models.basemodel import BaseModel, Base
+from sqlalchemy import Column, String, Float, Integer, ForeignKey
 from datetime import datetime
 
 
 class DailyLog(BaseModel, Base):
     ''' This is the class representation of the Object DailyLog '''
     __tablename__ = "daily_log"
-    month  = Column(String(60), nullable=False)
+    month = Column(String(60), nullable=False)
     day = Column(Integer, nullable=False)
     year = Column(Integer, nullable=False)
     task_id = Column(String(128), ForeignKey("tasks.id"), nullable=False)

@@ -2,12 +2,13 @@
 ''' This module contains the class definition of Task '''
 
 from models.basemodel import BaseModel, Base
-from sqlalchemy import Column, String, Float
+from sqlalchemy import Column, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
+
 
 class Task(BaseModel, Base):
     ''' This is the class that will represent Task objects '''
-    
+
     __tablename__ = "tasks"
     task_name = Column(String(128), nullable=False)
     total_time_on_task = Column(Float, nullable=True)
