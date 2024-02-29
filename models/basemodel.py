@@ -16,7 +16,7 @@ class BaseModel:
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """Instantiates a new model"""
         if not kwargs.get('id'):
             self.id = str(uuid.uuid4())
@@ -24,17 +24,6 @@ class BaseModel:
             self.created_at = datetime.now()
         if not kwargs.get('updated_at'):
             self.updated_at = datetime.now()
-
-        if args:
-            if name:
-                self.name = name
-            if state_id:
-                self.id = state_id
-        if 'updated_at' in kwargs:
-            kwargs['updated_at'] = datetime.strptime(
-                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
-        kwargs['created_at'] = datetime.strptime(
-                kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
 
         self.__dict__.update(kwargs)
 

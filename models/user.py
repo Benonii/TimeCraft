@@ -11,3 +11,5 @@ class User(BaseModel, Base):
     name = Column(String(128), nullable=False)
     weekly_work_hours_goal = Column(Float, nullable=False)
     number_of_work_days = Column(Integer, nullable=False)
+    total_productive_time = Column(Float, nullable=False, default=0)
+    total_wasted_time = Column(Float, nullable=False, default=0)
