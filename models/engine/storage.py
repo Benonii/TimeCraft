@@ -23,9 +23,9 @@ class Storage:
     def __init__(self):
         ''' Insantization '''
         env = os.environ.get('TC_ENV')
-        self.__engine = create_engine('mysql+mysqldb:'\
-                                      +'//tc_dev:tc_dev_pwd_4796@localhost'\
-                                      +'/tc_dev_db')
+        self.__engine = create_engine('mysql+mysqldb:'
+                                      + '//tc_dev:tc_dev_pwd_4796@localhost'
+                                      + '/tc_dev_db')
         if env == "test":
             Base.metadata.drop_all(self.__engine)
 
@@ -45,7 +45,7 @@ class Storage:
                 key = f"{task.name}.{task.id}"
                 objs[key] = task
         return objs
-    
+
     def total_time_on_task(self, usr, task=None):
         ''' Gets the total time spent across all tasks OR
             total time spent on one task if task is specified '''
@@ -60,10 +60,32 @@ class Storage:
         for tsk in tasks:
             total_time_on_tasks += tsk.total_time_on_task
         return total_time_on_task
-        
+
+    def get_user(self, user_id=None):
+        """ Get a user(Users) from the list of users """
+        users = self.__session.query(User)
+
+        if user_id:
+            for user in users:
+                if user.id == user_id:
+                    return user
+            return None
+        return [user.to_dict() for user in users]
+
+    def get_task(self, task_id=None):
+        """ Get a task(or all tasks) from the list of tasks """
+        tasks = self.__session.query(Task)
+
+        if task_id:
+            for task in tasks:
+                if task.id == task_id:
+                    return task
+            return None
+        return tasks
+
     def new(self, obj):
         ''' Adds a new object to the session '''
-        self.__session.add(task)
+        self.__session.add(obj)
 
     def save(self):
         self.__session.commit()
