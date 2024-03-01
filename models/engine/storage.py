@@ -83,6 +83,18 @@ class Storage:
             return None
         return tasks
 
+    def get_logs_of_the_day(self, log_id=None):
+        """ Gets a log(or all logs) from the list of logs """
+        logs = self.__session.query(DailyLog)
+        logs_of_the_day = []
+
+        if log_id:
+            for log in logs:
+                if log.id == log_id:
+                    logs_of_the_day.append(log)
+            return logs_of_the_day
+        return logs
+
     def new(self, obj):
         ''' Adds a new object to the session '''
         self.__session.add(obj)
