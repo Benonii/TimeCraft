@@ -6,7 +6,7 @@ import sys
 import os
 import uuid
 import calendar
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from models.basemodel import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -196,6 +196,7 @@ class TcCommand(cmd.Cmd):
                 month = calendar.month_name[datetime.today().month]
                 day = datetime.today().day
                 year = datetime.today().year
+                log_id = f"{month}.{day}.{year}"
                 # Day of Week
                 Dow = datetime.now().strftime("%A")
 
@@ -217,6 +218,7 @@ class TcCommand(cmd.Cmd):
                 print("Something went wrong. Please try again.")
                 return'''
 
+            log_dict["id"] = log_id
             log_dict["month"] = month
             log_dict["day"] = day
             log_dict["year"] = year
@@ -264,6 +266,11 @@ class TcCommand(cmd.Cmd):
             print("Please make sure that user id is correct. Thank you!")
             return
 
+    def help_all_tasks(self):
+        """ Help information for the all_tasks method """
+        print("Get a list of tasks associated with a user")
+        print("Uaage: all_tasks")
+
     def do_total_time_on_task(self, args):
         """ Gets the total time on a given task """
         try:
@@ -278,6 +285,11 @@ class TcCommand(cmd.Cmd):
                   + f" on {task.task_name}")
         except Exception as e:
             print("Something is a bit off. Please try again :)")
+
+    def help_total_time_on_task(self):
+        """ Help information for the total_time_on_task method """
+        print("Gets the total time spent on a task")
+        print("Usage: total_time_on_task")
 
     def do_delete_task(self, args):
         """ Deletes a task from the list of tasks """
@@ -294,6 +306,135 @@ class TcCommand(cmd.Cmd):
             print("task deleted successfully")
         except TypeError as e:
             print("Something is a bit off. Please try again :)")
+
+    def help_delete_task(self):
+        """ Help information for delete_task method """
+        print("Delete a task. Remember that deleting tasks will also delete"
+              + " all logs related to the task")
+        print("Usage: delete_task")
+
+    def do_total_productive_time(self, args):
+        """ Get the total productive hours for a user """
+        user_id = str(input("Can I please see some ID? :)\n :"))
+
+        user = storage.get_user(user_id)
+
+        print(f"so far, you've logged in {user.total_productive_time}"
+              + " hours of solid work. Keep it going!")
+
+    def help_total_productive_time(self):
+        """ Help information for totaL_productive_time """
+        print("Find out how much time you've been produxtive overall")
+        print("Usage: total_productive_time")
+
+    def do_total_wasted_time(self, args):
+        """ Get the total time wasted by a user """
+        user_id = str(input("Can I please see some ID? :)\n :"))
+
+        user = storage.get_user(user_id)
+
+        print(f"so far, you've wasted {user.total_wasted_time} hours."
+              + " Remember, it's about progress not perfection. Keep going!")
+
+    def help_total_wasted_time(self):
+        """ Help informationi for total_wasted_time """
+        print("Find how much time a user has wasted so far")
+        print("Usage: total_wasted_time")
+
+    def do_daily_report(self, args):
+        """ Gets a list of all logs for a given day """
+        try:
+            user_id = str(input("Can I please see some ID? :)\n :"))
+            date = str(input("What date should we get a report on?\n( Example"
+                             + ": today OR February-29-2024 )\n: "))
+            date = date.replace('-', '.')
+            date = date.replace(':', '.')
+            date = date.replace(' ', '.')
+
+            if date == "today":
+                date = datetime.today().strftime("%B.%d.%Y")
+
+            logs = storage.get_logs_of_the_day(date)
+
+            if not logs:
+                print("There seems to be no logs for today")
+                return
+        except TypeError as e:
+            print("Something seems off. Please try again!")
+            return
+
+        total_time_on_task_day = 0
+        total_wasted_time_day = 0
+
+        for log in logs:
+            task = storage.get_task(log.task_id)
+            if task.user_id == user_id:
+                total_time_on_task_day += log.time_on_task
+                total_wasted_time_day += log.time_wasted
+                print(f"You spent {log.time_on_task} hours on"
+                      + f"{task.task_name}")
+        print(f"You spent a total of {total_time_on_task_day} hours working")
+        print()
+        print(f"You wasted a total of {total_wasted_time_day} hours today")
+        print("Tomorrow is always another day. Salute!")
+
+    def do_weekly_report(self, args):
+        """ Gets a weekly report of time_on_task and time_wasted """
+        try:
+            user_id = str(input("Can I please see some ID? :)\n : "))
+            date = str(input("Please choose from these options\n"
+                             + "this_week   last_week    custom\n: "))
+
+            def this_week(date):
+                """ Gets a weekly report from Monday to Sunday based on a
+                    given date. """
+                weekday_offset = date.weekday()
+                start_date = today - timedelta(days=weekday_offset)
+                # 7 days of the week
+                end_date = start_date + timedelta(days=6)
+
+                total_time_on_task_week = 0
+                total_wasted_time_week = 0
+
+                day = start_date
+                while day < end_date:
+                    log_id = day.strftime("%B.%d.%Y")
+                    logs = storage.get_logs_of_the_day(log_id)
+
+                    for log in logs:
+                        task = storage.get_task(log.task_id)
+                        if task.user_id == user_id:
+                            total_time_on_task_week += log.time_on_task
+                            total_wasted_time_week += log.time_wasted
+
+                    day = day + timedelta(days=1)
+
+                print(f" This week you spent {total_time_on_task_week}"
+                      + " hours wroking.\nWay to move forward!")
+                print(f" You wasted a total of {total_wasted_time_week}"
+                      + " hours. You can't be perfect. But you can be better."
+                      + " See you next week! :))")
+
+            today = datetime.today()
+            if date == "this_week":
+                this_week(today)
+            elif date == "last_week":
+                this_week(today - timedelta(days=7))
+            elif date == "custom":
+                custom_date = str(input("Please enter a starting date\n"
+                                        + "(Example: February-29-2024)\n: "))
+                custom_date = custom_date.replace('-', '.')
+                custom_date = custom_date.replace(' ', '.')
+                custom_date = custom_date.replace(',', '.')
+
+                custom_date = datetime.strptime(custom_date, "%B.%d.%Y")
+                this_week(custom_date)
+            else:
+                print("Please choose between only the 3 choices. Thank You!")
+                return
+
+        except TypeError as e:
+            print("Something seems a bit off :( Please try again :)")
 
 
 if __name__ == "__main__":
