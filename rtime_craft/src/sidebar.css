@@ -1,0 +1,35 @@
+.sidebar {
+    width: 20%;
+    height: 100vh;
+}
+
+.sidebar--header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 160%;
+    font-weight: 100;
+}
+
+.sidebar--actions {
+    display: grid;
+    text-align: center;
+}
+
+.primary_btn {
+    background-color: #fff;
+    border: none;
+    padding: 15px;
+    color: rgb(78, 78, 78);
+    font-size: 140%;
+
+}
+
+.primary_btn:hover{
+	border: 0, 2px, 0, 2px green;
+}
+
+.primary_btn:active{
+    background: linear-gradient(to right, rgba(70, 226, 13, 0.4) 0%, rgba(70, 226, 13, 1) 50%, rgba(70, 226, 13, 0.2) 95%);
+    color: #fff;
+}
