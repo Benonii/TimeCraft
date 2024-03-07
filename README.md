@@ -30,7 +30,7 @@ on task.
    - The command will return your unique User ID, essential for task 
      management and logging.
 
-3. ### Manage Tasks:**
+3. ### Manage Tasks:
    - #### Create a new task:
      - Use the `new Task` command, specifying your User ID (from step 2).
      - Enter the task name and how much you'd like to dedicate to the task.
@@ -48,7 +48,7 @@ on task.
     - Use the `new Log` command to record your activity for the day. Provide       your Task ID (from step 3) and specify how much time you've spent on 
       and how much time you've wasted
 
-4. ### Generate Reports:
+5. ### Generate Reports:
    - #### Daily report:
      - Use the `daily_report` command with your User ID.
      - You can either enter "today" for the current day, or a specific date
@@ -64,20 +64,20 @@ on task.
    - #### Monthly report:
      - Use the `monthly_report` command with your User ID to generate a report for the entire month.
 
-5. ### Time Metrics:
+6. ### Time Metrics:
    - #### Total productive time:
      - Use the `total_productive_time` command with your User ID to calculate the total time spent productively across all tasks.
    - #### Total wasted time:
      - Use the `total_wasted_time` command with your User ID to determine the total time wasted across all tasks.
 
-6. ### Exit:
+7. ### Exit:
    - To exit TimeCraft, you can either enter the `quit` command or press `Ctrl+D`.
 
 ## Contributions:
 
 TimeCraft welcomes contributions from the community! Feel free to report bugs, suggest improvements, or create pull requests to enhance the project's functionality and user experience.
 
-**__Master your time and optimize your productivity with TimeCraft!__**
+**Master your time and optimize your productivity with TimeCraft!**
 
 ## Command List:
 
