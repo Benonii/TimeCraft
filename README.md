@@ -1,105 +1,79 @@
-Welcome! This project is called TimeCraft.
+# TimeCraft: Track Your Time and Productivity
 
-The goal of this project is to help you track time on task.
-It records how much time you spend on a task and how much time you've wasted over all.
+**Project Goal:**
 
-It can be used by multiple users, It can log records for multiple tasks.
-But it only accepts one log per task for one day. It can also give you daily, weekly and monthly reports.
-And finally, it can give you metrics like Total productive time and Total
-wasted time and more...
+This project empowers you to manage your time effectively by keeping track of how much time you spend on specific tasks, helping you identify areas for improvement and optimize your workflow.
 
-Instructions for use:
+**Features:**
 
-In the project root directory, run ./timecraft.py
+* **Multi-user support:** Accommodates multiple users to personalize their time tracking experiences.
+* **Task management:** Create and manage tasks, including their estimated duration.
+* **Task logging:** Record the time spent and wasted time for each task, providing valuable insights into your work habits.
+* **Reporting:** Generate comprehensive reports on daily, weekly, and monthly activity, helping you assess your progress and identify trends.
+* **Time metrics:** Gain insights into your total productive and wasted time, allowing you to make informed decisions about your time usage.
 
-Run the command new User to create your user. Save the User Id. You will need
-it to create tasks and log your activity.
+**Instructions:**
 
-Commands:
-new User
-new Task
-new Log
-all_tasks
-total_time_on_task
-delete_task
-daily_report
-weekly_report
-monthly_report
-total_productive_time
-total_wasted_time
-quit
+1. **Start TimeCraft:**
+   - Open your terminal and navigate to the project directory.
+   - Run `./timecraft.py` to initiate.
 
+2. **Create a User:**
+   - Use the `new User` command to set up your user profile.
+   - Provide your name, weekly work hour goals, and number of work days per week.
+   - The command will return your unique User ID, essential for task management and logging.
 
-new User
+3. **Manage Tasks:**
+   - **Create a new task:**
+     - Use the `new Task` command, specifying your User ID (from step 2).
+     - Enter the task name and the desired time allocation.
+     - The command will return a Task ID for future reference.
+   - **View all tasks:**
+     - Use the `all_tasks` command, providing your User ID, to list your associated tasks.
+   - **Total time on task:**
+     - Use the `total_time_on_task` command, along with the Task ID, to retrieve the total time spent on that specific task.
+   - **Delete a task:**
+     - Use the `delete_task` command, specifying the Task ID, to permanently remove the task.
 
-Creates a new User. Asks for name, weekly work hour goals and number of work
-days. Returns your User ID.
+4. **Generate Reports:**
+   - **Daily report:**
+     - Use the `daily_report` command with your User ID.
+     - You can either enter "today" for the current day, or a specific date in the format "Month-Day-Year" (e.g., "February 29, 2024").
+   - **Weekly report:**
+     - Use the `weekly_report` command with your User ID.
+     - Enter one of the following options:
+       - "this_week" for a report on the current week.
+       - "last_week" for a report on the previous week.
+       - "custom" followed by a date in "Month Day Year" format (e.g., "February 24 2024") to get a report for the week containing that date.
+   - **Monthly report:**
+     - Use the `monthly_report` command with your User ID to generate a report for the entire month.
 
+5. **Time Metrics:**
+   - **Total productive time:**
+     - Use the `total_productive_time` command with your User ID to calculate the total time spent productively across all tasks.
+   - **Total wasted time:**
+     - Use the `total_wasted_time` command with your User ID to determine the total time wasted across all tasks.
 
-new Task
+6. **Exit:**
+   - To exit TimeCraft, you can either enter the `quit` command or press `Ctrl+D`.
 
-Creates a new Task for a given user.(Needs your User ID). Asks for task_name
-and how many hours you wnat to dedicate to that task. Returns the Task ID.
+**Contributions:**
 
+TimeCraft welcomes contributions from the community! Feel free to report bugs, suggest improvements, or create pull requests to enhance the project's functionality and user experience.
 
-new Log
+**Master your time and optimize your productivity with TimeCraft!**
 
-Creates a new Log.(Needs your Task ID). Asks how much time you spent on the task, and how much time you've wasted. (Returns the date of the log).
+**Command List:**
 
-
-all_task
-
-Returns a list of all tasks assosciated with a user.(Needs your User ID). 
-
-
-total_time_on_task
-
-Gets the total time you've spent on a task.(Needs your Task ID).
-
-
-delete_task
-
-Deletes a task.(Needs Task ID).
-
-
-daily_report
-
-Gives you a report of how you've spent your time for that day.(Needs User ID)
-Asks for day to get a report for. You can enter "today" or a specific date in
-the format: Month-Day-Year (Example: February 29, 2024).
-
-
-weekly_report
-
-Gives you a report of how you've spent your time for a given week.(Needs User
-ID) You can enter "this_week" for a report on this week, "last_week" for a report on lassweek. Or you could type "custom" and provide a date (format: Month Day Year)
-to get a report for the week containing that date.
-
-
-monthly_report
-
-Gives you a report of how you've spent your time for a given month.(Needs
-user ID)
-
-
-total_productive_time
-
-Returns the total time a user has been productive.(Needs User ID)
-
-
-total_wasted_time
-
-Return the total time a user has wasted.(Needs User ID)
-
-quit
-
-Exits TimeCraft. You can also exit by pressing ctrl^D.
-
-Contributions
-
-Everyone is welcome to add features, find bugs and make suggestions. If you would like to report a bug or make suggestions, feel free to open up an issue.
-
-If you would like to make contributions as a developer, feel free to fork 
-this repo, and create a pull request once you're done.
-
-Master your fate one day at a time! Enjoy!
+- [new User](#new-user)
+- [new Task](#new-task)
+- [new Log](#new-log)
+- [all_tasks](#all_tasks)
+- [total_time_on_task](#total_time_on_task)
+- [delete_task](#delete_task)
+- [daily_report](#daily-report)
+- [weekly_report](#weekly-report)
+- [monthly_report](#monthly-report)
+- [total_productive_time](#total_productive_time)
+- [total_wasted_time](#total_wasted_time)
+- [quit](#quit)
