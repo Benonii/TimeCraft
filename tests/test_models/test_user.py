@@ -26,3 +26,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(self.user.number_of_work_days, 6)
         self.assertEqual(self.user.total_productive_time, 0)
         self.assertEqual(self.user.total_wasted_time, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

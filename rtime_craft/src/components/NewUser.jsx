@@ -1,26 +1,26 @@
-import React from "react"
-
+import React from "react";
+import "../newuser.css";
 export default function NewUser() {
 	return (
-	    <main>
-		<h1>New User</h1>
-    		<p> Hey There! Welcome to TImeCraft!. <br />
-		    My name is Tiempo. Now it's your turn
+	    <main className="new-user-container">
+		<h1 className="title">New User</h1>
+    		<p className="intro"> Hey There! Welcome to TImeCraft!. <br />
+		    My name is <span className="tiempo">Tiempo</span>. Now it's your turn
 		</p>
     	
 		<form action="post">
-        	    <label for="user-name">What is your name?</label>
+        	    <label htmlfor="user-name">What is your name?</label>
         	    <br />
         	    <input type="text" name="user-name" />
         	    <br /><br />
 
-        	    <label for="weekly-hours">How many hours would you 
+        	    <label htmlfor="weekly-hours">How many hours would you 
 			like to work per week?</label>
         	    <br />
         	    <input type="text" name="weekly-hours" />
         	    <br /><br />
 
-        	    <label for="work-days">How many days per week do you
+        	    <label htmlfor="work-days">How many days per week do you
 			work?</label>
         	    <br />
         	    <input type="text" name="work_days" /> 
@@ -28,5 +28,5 @@ export default function NewUser() {
 
     <button type="submit">Submit</button>
 	    </main>
-	)
+	);
 }

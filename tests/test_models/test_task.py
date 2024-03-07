@@ -24,3 +24,7 @@ class TestTask(unittest.TestCase):
         self.assertEqual(task.user_id, "this is the user id")
         self.assertEqual(type(task.logs),
                          sqlalchemy.orm.collections.InstrumentedList)
+
+
+if __name__ == "__main__":
+    unittest.main()
