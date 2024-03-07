@@ -26,3 +26,7 @@ class TestLog(unittest.TestCase):
         self.assertEqual(log.time_on_task, 3)
         self.assertEqual(log.time_wasted, 1.2)
         self.assertEqual(log.day_of_week, "Saturday")
+
+
+if __name__ == "__main__":
+    unittest.main()

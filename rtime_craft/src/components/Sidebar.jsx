@@ -1,11 +1,12 @@
-import React from "react"
-import "../sidebar.css"
+import React from "react";
+import "../sidebar.css";
+import logo from "../images/tc-logo_3.jpg";
 
 export default function Sidebar(props){
     return (
         <section className="pane sidebar">
             <div className="sidebar--header">
-                <h3>TimeCraft</h3>
+                <img src={logo} alt="logo" />
             </div>
             <div className="sidebar--actions">
                 <button className="primary_btn"

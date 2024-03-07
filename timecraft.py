@@ -22,16 +22,17 @@ class TcCommand(cmd.Cmd):
 
     if sys.stdin.isatty():
         # Intro message
-        intro = "\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"\
-                + "|                                                          |\n"\
-                + "|                  Welcome to TimeCraft!                   |\n"\
-                + "| You know how it doesn't feel like 24 hours are enough?   |\n"\
-                + "| Well, this app is inteded to show exactly where all those|\n"\
-                + "| hours are going. It also gives you daily, weekly and     |\n"\
-                + "| monthly reports of your time usage.                      |\n"\
-                + "| Type help and enter to see a list of commands. Enjoy!    |\n"\
-                + "|                                                          |\n"\
-                + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"\
+        intro = \
+            "\n ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"\
+            + "|                                                          |\n"\
+            + "|                  Welcome to TimeCraft!                   |\n"\
+            + "| You know how it doesn't feel like 24 hours are enough?   |\n"\
+            + "| Well, this app is inteded to show exactly where all those|\n"\
+            + "| hours are going. It also gives you daily, weekly and     |\n"\
+            + "| monthly reports of your time usage.                      |\n"\
+            + "| Type help and enter to see a list of commands. Enjoy!    |\n"\
+            + "|                                                          |\n"\
+            + " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"\
 
     # Create a dictionary of our classes
     classes = {
@@ -118,9 +119,11 @@ class TcCommand(cmd.Cmd):
                           + "How many hours would you like to work per week?"
                           + "(Example: 40, 55.5, 20)\n: "))
                 work_days = int(
-                        input(f"{self.prompt}How many days do you work in a week?\n: "))
+                        input(f"{self.prompt} How many days do you work in a "
+                              + "week?\n: "))
             except Exception as e:
-                print("Something seems a bit off. Run 'help new' and try again)")
+                print("Something seems a bit off. "
+                      + "Run 'help new' and try again)")
                 return
 
             user_dict["name"] = name
@@ -131,8 +134,14 @@ class TcCommand(cmd.Cmd):
 
             storage.new(new_user)
             storage.save()
+
+            # Saves the ID for future use
+            storage.user_id = new_user.id
+
             print("All done. Here is your ID, please remember it."
-                  + " You will use it to create tasks and log your activity ;)")
+                  + " You will use it to create tasks and log your "
+                  + "activity ;)")
+            print(f"Current User: {new_user.name}")
             print(f"User ID: {new_user.id}")
 
         # Creates a new Task
@@ -140,24 +149,31 @@ class TcCommand(cmd.Cmd):
             task_dict = dict()
 
             try:
-                user_id = str(input("A new task. Cool! But first,"
-                                    + " what is your ID?\n: "))
+                user_id = storage.user_id
+                if user_id is None:
+                    user_id = str(input("A new task. Cool! But first,"
+                                        + " what is your ID?\n: "))
+                    storage.user_id = user_id
+
                 user = storage.get_user(user_id)
 
                 if not user:
                     print("There seems to be no user with that ID."
                           + "Please try again")
+                    storage.user_id = None
                     return
-
+                print(f"Current User: {user.name}")
                 task_name = str(input("Please name your task\n: "))
                 total_tot = 0
-                daily_goal = float(input("How many hours would you like to"
-                                         + " dedicate to this task everyday?\n: "
+                daily_goal = float(input("How many hours would you like to "
+                                         + "dedicate to this task everyday?\n:"
+                                         + " "
                                          ))
                 weekly_goal = daily_goal * user.number_of_work_days
 
             except Exception as e:
-                print("Something seems a bit off. Run 'help new' and try again :)")
+                print("Something seems a bit off. "
+                      + "Run 'help new' and try again :)")
                 return
 
             task_dict["task_name"] = task_name
@@ -181,13 +197,13 @@ class TcCommand(cmd.Cmd):
 
                 if not task:
                     print("There seems to be no task with that ID."
-                          + "Please try again")
+                          + " Please try again")
                     return
                 user = storage.get_user(task.user_id)
                 month = calendar.month_name[datetime.today().month]
                 day = datetime.today().day
                 year = datetime.today().year
-                log_id = f"{month}.{day}.{year}"
+                log_date = f"{month}.{day}.{year}"
                 # Day of Week
                 Dow = datetime.now().strftime("%A")
 
@@ -202,10 +218,11 @@ class TcCommand(cmd.Cmd):
                 user.total_wasted_time += time_wasted
 
             except Exception as e:
-                print("Something seems a bit off. Run 'help new' and try again.")
+                print("Something seems a bit off. "
+                      + "Run 'help new' and try again.")
                 return
 
-            log_dict["id"] = log_id
+            log_dict["date"] = log_date
             log_dict["month"] = month
             log_dict["day"] = day
             log_dict["year"] = year
@@ -233,7 +250,10 @@ class TcCommand(cmd.Cmd):
     def do_all_tasks(self, args):
         """ Gets a list of all tasks associated with a user """
         try:
-            user_id = str(input("Can I please see some ID?\n: "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID?\n: "))
+                storage.user_id = user_id
 
             # Get all the tasks in storage
             tasks = storage.get_task()
@@ -287,6 +307,8 @@ class TcCommand(cmd.Cmd):
         """ Deletes a task from the list of tasks """
         try:
             task_id = str(input("Please give me the task ID :)\n: "))
+            print(f"{self.prompt} Remember that deleting the task deletes all"
+                  + "logs associated with the task :)")
             task = storage.get_task(task_id)
 
             if not task:
@@ -298,7 +320,8 @@ class TcCommand(cmd.Cmd):
             storage.save()
             print("Task deleted successfully!")
         except Exception as e:
-            print("Something is a bit off. Run 'help delete_task' try again :)")
+            print("Something is a bit off. "
+                  + "Run 'help delete_task' try again :)")
 
     def help_delete_task(self):
         """ Help information for delete_task method """
@@ -310,15 +333,24 @@ class TcCommand(cmd.Cmd):
     def do_total_productive_time(self, args):
         try:
             """ Get the total productive hours for a user """
-            user_id = str(input("Can I please see some ID? :)\n: "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID? :)\n: "))
+                storage.user_id = user_id
 
             user = storage.get_user(user_id)
 
+            if not user:
+                print("There seems to be no user with that ID")
+                storage.user_id = None
+                return
+            print(f"Current User: {user.name}")
             print(f"So far, you've logged in {user.total_productive_time}"
                   + " hours of solid work. Keep it going!")
-        except:
+        except Exception as e:
             print("Something seems a bit off. Run 'help total_productive_time"
                   + f"' and try again")
+
     def help_total_productive_time(self):
         """ Help information for total_productive_time """
         print("Find out how much time you've been productive overall")
@@ -328,12 +360,21 @@ class TcCommand(cmd.Cmd):
     def do_total_wasted_time(self, args):
         """ Get the total time wasted by a user """
         try:
-            user_id = str(input("Can I please see some ID? :)\n: "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID? :)\n: "))
+                storage.user_id = user_id
 
             user = storage.get_user(user_id)
 
+            if not user:
+                print("There seems to be no user with that ID")
+                storage.user_id = None
+                return
+            print(f"Current User: {user.name}")
             print(f"So far, you've wasted {user.total_wasted_time} hours."
-                  + " Remember, it's about progress not perfection. Keep going!")
+                  + " Remember, it's about progress not perfection. "
+                  + "Keep going!")
         except Exception as e:
             print("Something seems a bit off. Run 'help total_wasted_time'"
                   + " and try again.")
@@ -347,10 +388,14 @@ class TcCommand(cmd.Cmd):
     def do_daily_report(self, args):
         """ Gets a list of all logs for a given day """
         try:
-            user_id = str(input("Can I please see some ID? :)\n: "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID? :)\n: "))
+                storage.user_id = user_id
 
             if user_id == "":
                 print("Please enter a User ID and try again")
+                storage.user_id = None
                 return
 
             date = str(input("What date should we get a report on?\n( Example"
@@ -372,7 +417,7 @@ class TcCommand(cmd.Cmd):
             if not logs:
                 print(f"{self.prompt} There seems to be no logs for today")
                 return
-        except Exception as e:
+        except TypeError as e:
             print(f"{self.prompt} Something seems off. Run 'help daily_report'"
                   + " and try again.")
             return
@@ -386,39 +431,47 @@ class TcCommand(cmd.Cmd):
                 total_time_on_task_day += log.time_on_task
                 total_wasted_time_day += log.time_wasted
                 print(f"{self.prompt} You spent {log.time_on_task} hours on"
-                      + f"{task.task_name}")
-        print(f"{self.prompt} You spent a total of {total_time_on_task_day} hours working")
+                      + f" {task.task_name}")
+        print(f"{self.prompt} You spent a total of {total_time_on_task_day} "
+              + "hours working")
         print()
-        print(f"{self.prompt} You wasted a total of {total_wasted_time_day} hours today")
+        print(f"{self.prompt} You wasted a total of {total_wasted_time_day} "
+              + "hours today")
         print(f"{self.prompt} Tomorrow is always another day. Salute!")
 
     def help_daily_report(self):
         """ Handles ducumentation for the method daily_report """
-        print("daily_report: Gets a report of your daily time on task and time wasted")
+        print("daily_report: Gets a report of your daily time on task and "
+              + "time wasted")
         print("Usage: type daily_report and press enter")
         print("Provide your user ID and the day you want to get logs for")
 
     def do_weekly_report(self, args):
         """ Gets a weekly report of time_on_task and time_wasted """
         try:
-            user_id = str(input("Can I please see some ID? :)\n : "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID? :)\n : "))
+                storage.user_id = user_id
+
             user = storage.get_user(user_id)
             if not user:
                 print("There seems to be no user with that ID."
                       + f" Please try again!")
+                storage.user_id = None
                 return
-
+            print(f"Current User: {user.name}")
             date = str(input("Please choose from these options\n"
                              + "this_week   last_week    custom\n: "))
 
             def this_week(date):
                 """ Gets a weekly report from Monday to Sunday based on a
-                    given date. """ 
+                    given date. """
                 weekday_offset = date.weekday()
                 start_date = date - timedelta(days=weekday_offset)
                 print(f"Start Date: {start_date.strftime('%B.%-d.%Y')}")
                 # 7 days of the week
-                end_date = start_date + timedelta(days=7)
+                end_date = start_date + timedelta(days=6)
                 print(f"End Date: {end_date.strftime('%B.%-d.%Y')}")
 
                 total_time_on_task_week = 0
@@ -437,15 +490,17 @@ class TcCommand(cmd.Cmd):
 
                     day += timedelta(days=1)
 
-                    if total_time_on_task_week == 0 and\
-                            total_wasted_time_week == 0:
-                        print("There are no logs for this week.")
-                        return
+                if total_time_on_task_week == 0 and\
+                        total_wasted_time_week == 0:
+                    print("There are no logs for this week.")
+                    return
 
-                print(f"{self.prompt} This week you spent {total_time_on_task_week}"
+                print(f"{self.prompt} This week you spent "
+                      + f"{total_time_on_task_week}"
                       + " hours wroking.\nWay to move forward!")
-                print(f"{self.prompt} You wasted a total of {total_wasted_time_week}"
-                      + " hours.\nYou can't be perfect. But you can be better."
+                print(f"{self.prompt} You wasted a total of "
+                      + f"{total_wasted_time_week} "
+                      + "hours.\nYou can't be perfect. But you can be better."
                       + " See you next week! :))")
 
             today = datetime.today()
@@ -464,7 +519,8 @@ class TcCommand(cmd.Cmd):
                 custom_date = datetime.strptime(custom_date, "%B.%d.%Y")
                 this_week(custom_date)
             else:
-                print(f"{self.prompt} Please choose between only the 3 options. Thank You!")
+                print(f"{self.prompt} Please choose between only the "
+                      + "3 options. Thank You!")
                 return
 
         except ValueError:
@@ -474,26 +530,32 @@ class TcCommand(cmd.Cmd):
             print(f"{self.prompt} Something seems a bit off."
                   + " Run 'help weekly_report' and try again")
 
-
     def help_weekly_report(self):
         """ Handles ducumentation for the method weekly_report """
         print(f"weekly_report: Gets a report of your weekly time on task"
               + " and time wasted")
         print(f"Usage: Type 'weekly_report' and press enter")
-        print("Provide your User ID and choose between this_week, last_week or"
-              + " custom(Choose a date and get a report for that week)")  
+        print("Provide your User ID and choose between this_week, "
+              + "last_week or custom(Choose a date and get a report "
+              + "for that week)")
 
     def do_monthly_report(self, args):
         """ Get the total time on task and total wasted time for the month """
         try:
-            user_id = str(input("Can I please see some ID? :)\n : "))
+            user_id = storage.user_id
+            if user_id is None:
+                user_id = str(input("Can I please see some ID? :)\n : "))
+                storage.user_id = user_id
+
             user = storage.get_user(user_id)
 
             if not user:
                 print("There seems to be no user with that ID."
                       + " Please try again!")
+                stprage.user_id = None
                 return
 
+            print(f"Current User: {user.name}")
             month = str(input("What month would you like to get a report for?"
                               + "\n (Example: February) : "))
             # Total time on task this month
@@ -524,7 +586,7 @@ class TcCommand(cmd.Cmd):
             print(f"{self.prompt} You did good. Here is to doing better next"
                   + " month!")
             print()
-        except NameError as e:
+        except Exception as e:
             print(f"{self.prompt} Something seems to be a bit off."
                   + " Run 'help monthly_report' and try agian :)")
 
@@ -533,116 +595,28 @@ class TcCommand(cmd.Cmd):
         print("monthly_report: Gets report of time on task and time wasted\n"
               + "for a specified month")
         print("usage: Type 'monthly_report' and press enter")
-        print("Provide your User ID and the month you want to get a report for")
+        print("Provide your User ID and the month you want to "
+              + "get a report for")
 
-    '''
-    def do_update_task(self, args):
-        """ Updates a task's attributes """
-        try:
-            task_id = str(input("Can I please have the task ID? :)\n : "))
-            updater_dict = dict()
-            # Attribute to be updated
-            attribute = str(input("What attribute would you like to change?\n"
-                                  + "Choose one: task_name, daily_goal, "
-                                  + "weekly_goal\n: "))
+    def do_switch_user(self, args):
+        ''' Switches the user_id we are operating with '''
 
-            if attribute not in ["task_name", "daily_goal", "weekly_goal"]:
-                print("That doesn't seem right :< Try that again")
+        user_id = str(input("Can I please have the user ID?\n: "))
+        user = storage.get_user(user_id)
 
-            updater_dict[attribute] = str(input("What do you want to change it to?"
-                                                + "\n: "))
-            task = storage.get_task(task_id)
-            task.__dict__.update(updater_dict)
-            task.save()
-
-            print("Task updated successfully")
-        except TypeError as e:
-            print("Something seems off :( Please try again")
+        if not user:
+            print(f"{self.prompt} There seems to be no user with that ID"
+                  + ". Please try again")
             return
+        storage.user_id = user_id
+        print(f"Switched to user {user.name}")
 
-    def help_update_task(self):
-        """ handles documentation for the method update_task """
-        print("update_task: Updates the attributes of a task")
-        print("Usage: update_task")
-
-    def do_update_user(self, args):
-        """ Updates a user's attributes """
-        try:
-            user_id = str(input("Can I please see some ID? :)\n : "))
-            updater_dict = dict()
-            # Attribute to be updated
-            attribute = str(input("What attribute would you like to change?\n"
-                                  + "Choose one: name, weekly_work_hour_goals"
-                                  + ", number_of_work_days\n: "))
-
-            if attribute not in ["name", "weekly_work_hour_goals",
-                                 "number_of_work-days"]:
-                print("That doesn't seem right :< Try that again")
-                return
-
-            updater_dict[attribute] = str(input("What do you want to change it to?"
-                                                + "\n: "))
-            user = storage.get_user(user_id)
-            user.__dict__.update(updater_dict)
-            user.save()
-
-            print("User updated successfully")
-        except NameError as e:
-            print("Something seems off :( Please try again")
-            return
-
-
-    def help_update_user(self):
-        """ handles documentation for the method update_user """
-        print("update_task: Updates the attributes of a task")
-        print("Usage: update_task")
-
-    def do_update_todays_log(self, args):
-        try:
-            log_id = datetime.today().strftime("%B.%d.%Y")
-            task_id = str(input("What is the task ID?\n: "))
-            task = storage.get_task(task_id)
-            user = storage.get_user(task.user_id)
-            logs = storage.get_logs_of_the_day(log_id)
-
-            for log in logs:
-                if log.task_id == task_id:
-                   log_ = log
-
-            updater_dict = dict()
-            # Attribute to be updated
-            attribute = str(input("What attribute would you like to change?\n"
-                                  + "Choose one: task_name, daily_goal, "
-                                  + "weekly_goal"))
-
-            if attribute not in ["task_name", "daily_goal", "weekly_goal"]:
-                print("That doesn't seem right :< Try that again")
-
-            if attribute == "time_on_task":
-                user.total_time_on_task += float(input("How much more did you"
-                                                       + "work today on {}?\n"
-                                                       .format(task.task_name)
-                                                       ))
-            elif attribute == "time_wasted":
-                user.total_wasted_time += float(input("Did you waste anymore"
-                                                      +" time today? (put in 0"
-                                                      +" if not)\n: "))
-
-            updater_dict[attribute] = str(input("What do you want to change it to?"
-                                                + "\n: "))
-            log.__dict__.update(updater_dict)
-            storage.save(log)
-
-            print("Log updated successfully")
-        except Exception as e:
-            print("Something seems off :( Please try again")
-            return
-
-    def help_update_log(self, args):
-        """ Handles documentation for the method update_log """
-        print("update_log: add more time on task or wasted time")
-        print("Usage: update_log")
-    '''
+    def help_switch_user(self):
+        ''' Documentation for the method switch_user '''
+        print("switch_user: Switches from one user to another. Provided"
+              + " that it exists")
+        print("usage: Type 'switch_user' and press enter")
+        print("Provide the user ID of the User you want to switch to")
 
 
 if __name__ == "__main__":

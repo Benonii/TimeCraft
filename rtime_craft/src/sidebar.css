@@ -11,6 +11,11 @@
     font-weight: 100;
 }
 
+.sidebar--header > img {
+    width: 290px;
+    height: 250px;
+}
+
 .sidebar--actions {
     display: grid;
     text-align: center;

@@ -16,3 +16,4 @@ class DailyLog(BaseModel, Base):
     time_wasted = Column(Float, nullable=False, default=0)
     # Day of Week
     day_of_week = Column(String(55), nullable=False)
+    date = Column(String(60), nullable=True)

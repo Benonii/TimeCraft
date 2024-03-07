@@ -39,7 +39,7 @@ class TestBaseModel_init(unittest.TestCase):
         """ Tests the object's __str__() method """
         filtered_dict = {k: v for k, v in self.objct.__dict__.items() if v}
         test_str = f"[{type(self.objct).__name__}] ({self.objct.id})"\
-        + f" {filtered_dict}"
+                   + f" {filtered_dict}"
 
         self.assertEqual(self.objct.__str__(), test_str)
 
@@ -62,3 +62,7 @@ class TestBaseModel_init(unittest.TestCase):
         self.assertEqual(self.objct.to_dict(), filtered_dict)
 
     # The delete method will be tested using the other objects
+
+
+if __name__ == "__main__":
+    unittest.main()

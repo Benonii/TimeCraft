@@ -19,22 +19,20 @@ class Storage:
 
     __engine = None
     __session = None
+    user_id = None
 
     def __init__(self):
         ''' Insantization '''
-        env = os.environ.get('TC_ENV')
         self.__engine = create_engine('mysql+mysqldb:'
                                       + '//tc_dev:tc_dev_pwd_4796@localhost'
                                       + '/tc_dev_db')
-        if env == "test":
-            Base.metadata.drop_all(self.__engine)
 
     def all_tasks(self, usr):
         ''' Query the current databse session all tasks belonging to the user
         '''
-        objs = dict()
+        task_list = []
 
-        if type(user) is str:
+        if type(usr) is str:
             usr = eval(usr)
         usr_id = usr.id
 
@@ -42,15 +40,14 @@ class Storage:
 
         for task in tasks:
             if task.user_id == usr_id:
-                key = f"{task.name}.{task.id}"
-                objs[key] = task
-        return objs
+                task_list.append(task)
+        return task_list
 
     def total_time_on_task(self, usr, task=None):
         ''' Gets the total time spent across all tasks OR
             total time spent on one task if task is specified '''
-
-        tasks = all_tasks(self, usr)
+        tasks = self.all_tasks(usr)
+        total_time_on_task = 0
 
         if task:
             for tsk in tasks:
@@ -58,7 +55,7 @@ class Storage:
                     return task.total_time_on_task
 
         for tsk in tasks:
-            total_time_on_tasks += tsk.total_time_on_task
+            total_time_on_task += tsk.total_time_on_task
         return total_time_on_task
 
     def get_user(self, user_id=None):
@@ -70,7 +67,7 @@ class Storage:
                 if user.id == user_id:
                     return user
             return None
-        return [user.to_dict() for user in users]
+        return users
 
     def get_task(self, task_id=None):
         """ Get a task(or all tasks) from the list of tasks """
@@ -83,14 +80,14 @@ class Storage:
             return None
         return tasks
 
-    def get_logs_of_the_day(self, log_id=None):
+    def get_logs_of_the_day(self, log_date=None):
         """ Gets a log(or all logs) from the list of logs """
         logs = self.__session.query(DailyLog)
         logs_of_the_day = []
 
-        if log_id:
+        if log_date:
             for log in logs:
-                if log.id == log_id:
+                if log.date == log_date:
                     logs_of_the_day.append(log)
             return logs_of_the_day
         return logs
@@ -98,6 +95,10 @@ class Storage:
     def new(self, obj):
         ''' Adds a new object to the session '''
         self.__session.add(obj)
+
+    def set_user_id(self, user_id):
+        ''' Sets a user id for the session '''
+        self.user_id = user_id
 
     def save(self):
         self.__session.commit()
