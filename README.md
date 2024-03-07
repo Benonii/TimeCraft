@@ -1,6 +1,26 @@
 # TimeCraft: Track Your Time and Productivity
 
-# Table of Contents
+[Table of Contents](#table-of-contents)
+  * [Project Goal:](#project-goal)
+  * [Features:](#features)
+  * [Instructions:](#instructions)
+    + [Start TimeCraft:](#start-timecraft)
+    + [Create a User:](#create-a-user)
+    + [Manage Tasks:](#manage-tasks)
+      - [Create a new task:](#create-a-new-task)
+      - [View all tasks:](#view-all-tasks)
+      - [Total time on task:](#total-time-on-task)
+      - [Delete a task:](#delete-a-task)
+    + [Create a Log:](#create-a-log)
+    + [Generate Reports:](#generate-reports)
+      - [Daily report:](#daily-report)
+      - [Weekly report:](#weekly-report)
+      - [Monthly report:](#monthly-report)
+    + [Time Metrics:](#time-metrics)
+      - [Total productive time:](#total-productive-time)
+      - [Total wasted time:](#total-wasted-time)
+    + [Exit:](#exit)
+  * [Contributions:](#contributions)
 
 ## Project Goal:
 
@@ -44,7 +64,7 @@ on task.
    - #### Delete a task:
      - Use the `delete_task` command, specifying the Task ID, to 
        __permanently__ remove the task.
-4. ### Create Logs:
+4. ### Create a Log:
     - Use the `new Log` command to record your activity for the day. Provide       your Task ID (from step 3) and specify how much time you've spent on 
       and how much time you've wasted
 
