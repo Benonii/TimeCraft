@@ -76,7 +76,7 @@ TimeCraft welcomes contributions from the community! Feel free to report bugs, s
 
 **Command List:**
 
-- [new User](#new-user)
+- [new User](**#new-user**)
 - [new Task](#new-task)
 - [new Log](#new-log)
 - [all_tasks](#all_tasks)
