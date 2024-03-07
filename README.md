@@ -21,7 +21,7 @@ on task.
    - Open your terminal and navigate to the project directory.
    - Run `./timecraft.py` to initiate.
 
-2. **Create a User:**
+2. **Create a User:** [**#new-user**]
    - Use the `new User` command to set up your user profile.
    - Provide your name, weekly work hour goals, and number of work days per 
      week.
