@@ -1,6 +1,6 @@
 # TimeCraft: Track Your Time and Productivity
 
-[Table of Contents](#table-of-contents)
+[## Table of Contents](#table-of-contents)
   * [Project Goal:](#project-goal)
   * [Features:](#features)
   * [Instructions:](#instructions)
@@ -21,6 +21,9 @@
       - [Total wasted time:](#total-wasted-time)
     + [Exit:](#exit)
   * [Contributions:](#contributions)
+
+
+
 
 ## Project Goal:
 
