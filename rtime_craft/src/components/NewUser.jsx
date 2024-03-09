@@ -4,12 +4,12 @@ export default function NewUser() {
 	return (
 	    <main className="new-user-container">
 		<h1 className="title">New User</h1>
-    		<p className="intro"> Hey There! Welcome to TImeCraft!. <br />
+    		<p className="intro"> Hey There! Welcome to TimeCraft!. <br />
 		    My name is <span className="tiempo">Tiempo</span>. Now it's your turn
 		</p>
     	
-		<form action="post">
-        	    <label htmlfor="user-name">What is your name?</label>
+		<form action="POST">
+        	    <label htmlfor="username">What is your name?</label>
         	    <br />
         	    <input type="text" name="user-name" />
         	    <br /><br />
@@ -23,7 +23,7 @@ export default function NewUser() {
         	    <label htmlfor="work-days">How many days per week do you
 			work?</label>
         	    <br />
-        	    <input type="text" name="work_days" /> 
+        	    <input type="text" name="work-days=" /> 
     		</form>
 
     <button type="submit">Submit</button>
