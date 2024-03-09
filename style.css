@@ -1,0 +1,103 @@
+body {
+    font-family: 'Open Sans', sans-serif; /* Use a nicer font like Open Sans */
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    font-size: 1.2rem; /* Increase body font size */
+    min-height: 100vh; /* Ensure the page occupies the whole screen height */
+    justify-content: center;
+    align-items: center;
+}
+
+
+header.dynamic-header {
+    background-color: #fff; /* White background */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: 0.5s ease; /* Smooth background color transition */
+    line-height: 1;
+}
+
+h1 {
+    margin-top: 75px;
+    font-size: 3.5em;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+.gradient {
+    background: linear-gradient(to right, #008000, #00ff55);
+    background-clip: None;
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+main {
+    padding: 50px;
+    width: 90%; /* Adjust main content width if needed */
+    text-align: center; /* Center text within main content */
+}
+
+.description {
+    margin-bottom: 30px;
+}
+
+.description h2 {
+    font-size: 1.8em;
+    margin-bottom: 50px;
+    color: #705959; /* Adjust text color for better contrast */
+}
+
+.description p, .description li {
+    color: #747171; /* Adjust text color for readability */
+    font-weight: bold;
+}
+
+.description ul {
+    list-style: none;
+    padding: 3px;
+    margin: 10px;
+}
+
+.description li {
+    margin-left: 100px;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+    list-style: disc;
+    text-align: justify;
+}
+
+.cta {
+    text-align: center;
+}
+
+.btn {
+    background-color: #22FF00;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.7rem;
+}
+
+.btn:hover {
+    background-color: #008000;
+}
+
+footer {
+    background-color: #f5f5f5;
+    padding: 10px;
+    text-align: center;
+}
+
+.dynamic-header:hover {
+    background-color: #f0f0f0; 
+} /* Example hover color */ 
+
