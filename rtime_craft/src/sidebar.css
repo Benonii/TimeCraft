@@ -19,6 +19,7 @@
 .sidebar--actions {
     display: grid;
     text-align: center;
+    height: 100vh;
 }
 
 .primary_btn {
