@@ -135,6 +135,7 @@ main {
 .about a:hover {
     color: rgb(5, 41, 95);
     font-size: 1.7rem;
+    transition: 1s;
 }
 #paper-log {
     width: 400px;
