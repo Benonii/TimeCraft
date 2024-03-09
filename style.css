@@ -11,12 +11,41 @@ body {
 
 
 header.dynamic-header {
-    background-color: #fff; /* White background */
+    background-image: url('./tc-logo_3.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center; 
     padding: 20px;
     text-align: center;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     transition: 0.5s ease; /* Smooth background color transition */
     line-height: 1;
+    height: 70vh;
+}
+
+header.dynamic-header::after {
+    content: '';
+    background-color: #000;
+    opacity: 0.3;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav a {
+    color: #eee; /* Adjust text color for better contrast */
+    text-decoration: none; /* Remove underline */
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    border-radius: 10%;
+    color: #FFF;
+    font-size: 1.4rem;
+    transition: .7s;
 }
 
 h1 {
@@ -29,11 +58,12 @@ h3 {
 }
 
 .gradient {
-    background: linear-gradient(to right, #008000, #00ff55);
+    background: linear-gradient(to right, #05a105, #baf5a3);
     background-clip: None;
     color: transparent;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-align: center;
 }
 
 main {
@@ -52,6 +82,11 @@ main {
     color: #705959; /* Adjust text color for better contrast */
 }
 
+.description h2, h3 {
+    font-size: 1.8rem;
+    text-align: justify;
+    color: #4e4a4a;
+}
 .description p, .description li {
     color: #747171; /* Adjust text color for readability */
     font-weight: bold;
@@ -71,7 +106,43 @@ main {
     text-align: justify;
 }
 
+.description #task-sc, #log-sc, #report-sc {
+    margin-left: 20px;
+    margin-bottom: 25px;
+    width: 650px;
+    height: 550px;
+}
+
+.about p {
+    text-align: justify;
+    font-size: 1.4rem;
+    line-height: 1.9;
+}
+
+.about ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    line-height: 2;
+}
+
+.about a{
+    text-decoration: none;
+    color: rgb(5, 95, 73);
+    font-size: 1.5rem;
+}
+
+.about a:hover {
+    color: rgb(5, 41, 95);
+    font-size: 1.7rem;
+}
+#paper-log {
+    width: 400px;
+    height: 450px;
+}
+
 .cta {
+    margin-top: 200px;
     text-align: center;
 }
 
@@ -89,6 +160,8 @@ main {
 
 .btn:hover {
     background-color: #008000;
+    padding: 15px 20px;
+    font-size: 1.8rem;
 }
 
 footer {
