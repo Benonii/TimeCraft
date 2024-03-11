@@ -7,16 +7,17 @@ from models.dailylog import DailyLog
 from api.v1.actions import app_actions
 from flasgger.utils import swag_from
 from datetime import datetime, timedelta
+from flask import jsonify, request, abort
 
 
-@app_actions.route('/daily_report', methods=['GET'], strict_slashes=False)
+@app_actions.route('/daily_report', methods=['POST'], strict_slashes=False)
 def daily_report():
     """ Provides a daily report for the current user """
-    user = request.form.get('user_id')
+    user_id = request.form.get('userId')
     date = request.form.get('date')
     date = date.replace('-', '.')
     date = date.replace(':', '.')
-    date = date.repalce(',', '.')
+    date = date.replace(',', '.')
     date = date.replace(' ', '.')
     
     if date == "today":
@@ -105,4 +106,55 @@ def weekly_report():
 def monthly_report():
     """ Provides a monthly report for the current user """
     user_id = request.form.get('user_id')
+    user = storage.get_user(user_id)
+    month = request.form.get('month')
 
+    # total time on task month
+    ttot_month = 0
+    # total wasted timme month
+    twt_month = 0
+
+    logs = storage.get_logs_of_the_day()
+    logs_of_the_month = []
+    for log in logs:
+        if log.month == month:
+            logs_of_the_month.append()
+    if not logs_of_the_month:
+        return jsonify({})
+
+    for log in logs_of_the_month:
+        lask = storage.get_task(log.task_id)
+        if task.user_id == user_id:
+            ttot_month += log.time_on_task
+            twt_month += log.time_wasted
+    
+    monthly_report = {
+            'ttot_month': ttot_month,
+            'twt_month': twt_month
+        }
+
+    return jsonify(monthly_report)
+
+
+@app_actions.route('/total_productive_time', methods=['GET'],
+                   strict_slashes=False)
+def total_productive_time():
+    """ Gets the total productive time for a User """
+    user_id = request.form.get('user_id')
+    tpt = {
+            'total_productive_time': user.total_productive_time
+        }
+
+    return jsonify(tpt)
+
+
+@app_actions.route('/total_wasted_time', methods=['GET'],
+                   strict_slashes=False)
+def total_wasted_time():
+    """ Gets the total wasted time for a User """
+    user_id = request.form.get('user_id')
+    twt = {
+            'total_wasted_time': user.total_wasted_time
+        }
+
+    return jsonify(twt)
