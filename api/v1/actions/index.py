@@ -2,9 +2,10 @@
 
 """ Index """
 
-from api.v1.actions import actions
+from api.v1.actions import app_actions
+from flask import jsonify, request, abort
 
-@app_vies.route('/status', methods=['GET'], strict_slashes=False)
+@app_actions.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """ Status of API """
     return jsonify({"status": "OK"})
