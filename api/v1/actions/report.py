@@ -46,21 +46,24 @@ def daily_report():
 
     return jsonify(daily_report)
 
-@app_actions.route('/weekly_report', methods=['GET'], strict_slashes=False)
+@app_actions.route('/weekly_report', methods=['POST', 'GET'], strict_slashes=False)
 def weekly_report():
     """ Provides a weekly report for the current user """
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
+
+    week = request.form.get('week')
+    print(week)
 
     def this_week(date):
         """ Gets a weekly report from Monday to Sunday based on a
             given date. """
         weekday_offset = date.weekday()
         start_date = date - timedelta(days=weekday_offset)
-        print(f"Start Date: {start_date.strftime('%B.%-d.%Y')}")
+        # print(f"Start Date: {start_date.strftime('%B.%-d.%Y')}")
         # 7 days of the week
         end_date = start_date + timedelta(days=6)
-        print(f"End Date: {end_date.strftime('%B.%-d.%Y')}")
+        # print(f"End Date: {end_date.strftime('%B.%-d.%Y')}")
 
         ttot_week = 0
         twt_week = 0
@@ -73,31 +76,30 @@ def weekly_report():
             for log in logs:
                 task = storage.get_task(log.task_id)
                 if task.user_id == user_id:
-                    total_time_on_task_week += log.time_on_task
-                    total_wasted_time_week += log.time_wasted
+                    ttot_week += log.time_on_task
+                    twt_week += log.time_wasted
 
             day += timedelta(days=1)
         
         weekly_report = dict()
-        weekly_report['ttot_week'] = total_time_on_task_week
-        weekly_report['twt_week'] = total_wasted_time_week
+        weekly_report['ttot_week'] = ttot_week
+        weekly_report['twt_week'] = twt_week
 
         return jsonify(weekly_report)
 
-    today = datetime.today()
-    week = request.form.get('date')
+    today = datetime.today() 
 
     if week == "this_week":
-        this_week(today)
+        return this_week(today)
     elif week == "last_week":
-        this_week(today - timedelta(days=7))
+        return this_week(today - timedelta(days=7))
     elif week == "custom":
         custom_date = custom_date.replace(' ', '.')
         custom_date = custom_date.replace('-', '.')
         custom_date = custom_date.replace(',', '.')
         custom_date = custom_date.repalce(':', '.')
 
-        this_week(custom)
+        return this_week(custom)
     else:
         return jsonify({})
 
