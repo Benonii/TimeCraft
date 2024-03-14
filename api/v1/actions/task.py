@@ -17,7 +17,6 @@ def new_task():
 
     task_dict = dict()
     user = storage.get_user(user_id)
-    print(type(user))
     task_dict['user_id'] = user_id
     task_dict['task_name'] = request.form.get('taskName')
     task_dict['daily_goal'] = float(request.form.get('dailyGoal'))
@@ -46,13 +45,13 @@ def all_tasks():
     return jsonify(user_task_names)
 
 
-@app_actions.route('/ttot', methods=['GET'], strict_slashes=False)
+@app_actions.route('/total_time_on_task', methods=['POST', 'GET'], strict_slashes=False)
 def total_time_on_task():
     """ Gets the total time spent on task """
-    task_id = request.form.get('task-id')
+    task_id = request.form.get('taskId')
     task = storage.get_task(task_id)
 
-    return jsonify(task.total_time_on_task)
+    return jsonify({'ttot': task.total_time_on_task})
 
 
 @app_actions.route("/delete_task", methods=['DELETE'], strict_slashes=False)
