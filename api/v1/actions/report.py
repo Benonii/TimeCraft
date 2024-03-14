@@ -110,7 +110,6 @@ def monthly_report():
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
     month = request.form.get('month')
-    print(user_id)
     print(month)
 
     # total time on task month
@@ -121,7 +120,6 @@ def monthly_report():
     logs = storage.get_logs_of_the_day()
     logs_of_the_month = []
     for log in logs:
-        print(log.month)
         if log.month == month:
             logs_of_the_month.append(log)
     if not logs_of_the_month:
@@ -145,21 +143,22 @@ def monthly_report():
                    strict_slashes=False)
 def total_productive_time():
     """ Gets the total productive time for a User """
-    user_id = request.form.get('user_id')
-    tpt = {
-            'total_productive_time': user.total_productive_time
-        }
+    user_id = request.form.get('userId')
+    user = storage.get_user(user_id)
+    tpt = {'tpt': 0}
+    tpt['tpt'] = user.total_productive_time
 
     return jsonify(tpt)
 
 
-@app_actions.route('/total_wasted_time', methods=['GET'],
+@app_actions.route('/total_wasted_time', methods=['POST', 'GET'],
                    strict_slashes=False)
 def total_wasted_time():
     """ Gets the total wasted time for a User """
-    user_id = request.form.get('user_id')
+    user_id = request.form.get('userId')
+    user = storage.get_user(user_id)
     twt = {
-            'total_wasted_time': user.total_wasted_time
+            'twt': user.total_wasted_time
         }
 
     return jsonify(twt)
