@@ -10,16 +10,17 @@ from datetime import datetime, timedelta
 from flask import jsonify, request, abort
 
 
-@app_actions.route('/daily_report', methods=['POST'], strict_slashes=False)
+@app_actions.route('/daily_report', methods=['POST', 'GET'], strict_slashes=False)
 def daily_report():
     """ Provides a daily report for the current user """
     user_id = request.form.get('userId')
+    daily_report = dict()
     date = request.form.get('date')
     date = date.replace('-', '.')
     date = date.replace(':', '.')
     date = date.replace(',', '.')
     date = date.replace(' ', '.')
-    
+
     if date == "today":
         date = datetime.today().strftime("%B.%-d.%Y")
 
@@ -33,23 +34,22 @@ def daily_report():
 
     for log in logs:
         task = storage.get_task(log.task_id)
+        print(log.date)
 
         if task.user_id == user_id:
             ttot_day += log.time_on_task
             twt_day += log.time_wasted
 
-        daily_report = {
-                'ttot_day': ttot_day,
-                'twt_day': twt_day
-                }
+    daily_report['ttot_day'] = ttot_day
+    daily_report['twt_day'] = twt_day
 
-        return jsonify(daily_report)
 
+    return jsonify(daily_report)
 
 @app_actions.route('/weekly_report', methods=['GET'], strict_slashes=False)
 def weekly_report():
     """ Provides a weekly report for the current user """
-    user_id = request.form.get('user_id')
+    user_id = request.form.get('userId')
     user = storage.get_user(user_id)
 
     def this_week(date):
