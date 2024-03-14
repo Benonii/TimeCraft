@@ -7,11 +7,13 @@ from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
 from flasgger.utils import swag_from
+from api.v1.actions import app_actions
 from rtime_craft.src import components
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT-REGULAR'] = True
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+app.register_blueprint(app_actions, url_prefix="/tc/v1")
+CORS(app, resources={r"/tc/v1/*": {"origins": "http://localhost:3000"}})
 
 
 @app.teardown_appcontext
