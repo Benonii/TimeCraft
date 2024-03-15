@@ -8,9 +8,13 @@ export default function DailyReport() {
 	});
 
 	const [report, setReport] = useState({
+		weekday: '',
 		ttot_day: 0,
-		twt_day: 0
+		twt_day: 0,
+		date: ''
 	});
+
+	const [showReport, setShowReport] = useState(false)
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -48,10 +52,12 @@ export default function DailyReport() {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
+
+		setShowReport(true);
 	};
 
 	return (
-	    <main className="daily=report-container">
+	    <main className="daily-report-container">
 		<h1 className="title">Daily Report</h1>
 		<form onSubmit={handleSubmit}>
 		    <label htmlFor="userId">Can I please have some ID? </label>
@@ -62,20 +68,24 @@ export default function DailyReport() {
     		    <br />
     		    <input type="text" name="date" onChange={handleChange}
 		       	placeholder="Eg: today OR March 4 2024" />
-
-		    <button type="submit">Get my report</button>
+		    <br /><br />
+		    <div className="submit">
+		        <button type="submit">Get my report</button>
+		    </div>
 		</form>
     		
 		<br /><br />
-
-    		<h1 className="report-title">Tuesday, March 5 2024:</h1>
-    		<p className="report-content"> You spent <span className="green">{`${report.ttot_day}`} hours</span> on Training toady <br />
-        	    You spent <span className="green">{`${report.twt_day}`} hours</span> on sparring today <br />
-        	    You have been productive for <span className="green">{`${report.ttot_day}`} hours </span>
-		    today. Good Job! <br />
-        	    You have wasted <span className="red">{`${report.twt_day}`} hours</span> today. <br />
-        	    Tomorrow is always another day. Salute!
-    		</p>
+	
+		{showReport && (
+		    <div>
+		        <h1 className="report-title">{`Date: ${report.weekday}, ${report.date}`}</h1>
+    		        <p className="report-content">
+        	            Productive Time: <span className="green">{`${report.ttot_day}`} hour(s) </span>
+		            <br /> Good Job! <br />
+        	            Wasted time: <span className="red">{`${report.twt_day}`} hour(s)</span><br />
+        	            Tomorrow is always another day. Salute!
+    		        </p>
+		    </div>)}
 	    </main>
 	)
 }

@@ -1,8 +1,24 @@
 /* WeeklyReport.css */
 
-.weekly-report-container {
+body {
+    background-color: #f5f5f5;
+}
+
+.monthly-report-container {
+    margin-left: 5px;
     padding: 20px;
     background-color: #f5f5f5; /* A shade of white */
+    line-height: 2rem;
+}
+
+.monthly-title {
+    color: gray;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.monthly-title:hover {
+    color: #000;
 }
 
 label {
@@ -43,24 +59,4 @@ p {
     color: #333; /* Dark gray */
     font-size: 1.6rem;
     line-height: 2;
-}
-
-.week-choice {
-    display: flex;
-    justify-content: space-between;
-    width: 96%;
-
-}
-
-.weekly-btn {
-    background-color: #03f08d;
-    border: 2px #fff solid;
-}
-
-.weekly-btn:hover {
-    background-color: green;
-}
-
-.weekly-choice:active {
-    background-color: #1c5306;
 }

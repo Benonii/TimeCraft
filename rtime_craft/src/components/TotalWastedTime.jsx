@@ -10,6 +10,8 @@ export default function TotalWastedTime() {
 		twt: 0
 	});
 
+	const [showReport, setShowReport] = useState(false)
+
 	function handleChange(e) {
 		const { name, value } = e.target;
 		setFormData(prevState => ({
@@ -45,20 +47,27 @@ export default function TotalWastedTime() {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
+
+		setShowReport(true);
 	};
 	return (
 	    <div>
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} className="twt-form">
+		    <h1 className="title"> Total Wasted Time </h1>
 		    <label htmlFor="userId">Can I please have some ID? </label>
 		    <input type="text" name="userId" onChange={handleChange} />
 		    <br />
-		    <button type="sumbit" onClick={handleSubmit}>Get my Report!</button>
+		    <div className="sumbit">
+		        <button type="sumbit" onClick={handleSubmit}>Get my Report!</button>
+		    </div>
 		</form>
 
-		<h1 className="title"> Total Wasted Time </h1>
-		<h4 className="wasted-time"> So far, you have wasted {`${report.twt}`} hours.<br />
-        	    Remember, it's about progress not perfection. Keep going!
-	       </h4>
+		{showReport && (
+		    <div>
+			<h4 className="waste-report">So far, you have wasted <span className="wasted-time">
+			{` ${report.twt} `} hours.<br /></span>Remember, it's about progress not perfection. Keep 			  going!</h4>
+		    </div>
+		)}
 	    </div>
 	)
 }

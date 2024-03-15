@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import "../newlog.css"
 
 export default function NewLog() {
 	const [formData, setFormData] = useState({
@@ -30,10 +31,9 @@ export default function NewLog() {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				body: params.toString(),
-				mode: 'no-cors'
 				});
 
-				if (response !== {}) {
+				if (response.ok) {
 					console.log("Form submitted successfully")
 				} else {
 					console.error("Failed to submit form")
@@ -65,8 +65,10 @@ export default function NewLog() {
     			<br />
     			<input type="text" name="timeWasted" onChange={handleChange} />
 		</form>
+		<div className="submit">
+		    <button type="submit" onClick={handleSubmit}>Log</button>
+		</div>
 
-		<button type="submit" onClick={handleSubmit}>Log</button>
 	    </main>
 	)
 }
