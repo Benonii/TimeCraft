@@ -4,13 +4,20 @@ import "../weekly.css"
 export default function WeeklyReport() {
 	const [formData, setFormData] = useState({
 		userId: '',
-		week: ''
+		week: '',
+		dateOfWeek: ''
 	});
 
 	const [report, setReport] = useState({
+		start_date: '',
+		end_date: '',
 		ttot_week: 0,
 		twt_week: 0
 	});
+
+	const [showReport, setShowReport] = useState(false)
+
+	const [isCustom, setIsCustom] = useState(false);
 
 	function handleChange(e) {
 		const { name, value } = e.target;
@@ -28,6 +35,7 @@ export default function WeeklyReport() {
 		    const params = new URLSearchParams();
 		    params.append('userId', formData.userId);
 		    params.append('week', formData.week);
+		    params.append('dateOfWeek', formData.dateOfWeek)
 		    const response = await fetch(
 			'http://127.0.0.1:5001/tc/v1/weekly_report',
 			{
@@ -48,37 +56,70 @@ export default function WeeklyReport() {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
+
+		setShowReport(true)
 	};
+
+	function handleCustom() {
+		setIsCustom(true);
+		setFormData(prevState => ({
+			...prevState,
+			week: 'custom',
+		}));
+	}
+
 	return (
 	    <main className="weekly-report-container">
 		<h1 className="title"> Weekly Report </h1>
 		<form onSubmit={handleSubmit}>
-		    <label htmlFor="userId">Can I please have some ID? </label>
+		    <label htmlFor="userId">Please Enter your User ID: </label>
 		    <input type="text" name="userId" onChange={handleChange} />
 		    <br /><br />
-		    <label htmlFor="week">What week would you like to get a report for?
+		    <label htmlFor="week">What week would you like to get a report for?</label>
 		    <br />
-        	        <ol>
-               		    <li>This Week</li>
-            		    <li>Last Week</li>
-            		    <li>Custom</li>
-        	        </ol>
-    		    </label>
-    		<input type="text" name="week" onChange={handleChange}/>
-
+        	        <div className="week-choice">
+               		    <button type="button" className="week-btn"
+						  onClick={() => setFormData({
+								...formData,
+								week: 'this_week',
+								})}>
+				This Week</button>
+            		    <button type="button" className="week-btn"
+						  onClick={() => setFormData({
+								...formData,
+								week: 'last_week',
+								})}>
+				Last Week</button>
+            		    <button type="button" className="week-btn" onClick={handleCustom}>
+				Custom</button>
+        	        </div>
+		    {isCustom && (
+		    <div>
+			 <label htmlFor="dateOfWeek"> Enter a custom Date: </label>
+			 <br />
+    		         <input type="text" name="dateOfWeek" onChange={handleChange} />
+		    </div>)}
     		    <br /><br />
-		<button type="submit" onSubmit={handleSubmit}>Get my Report</button>
+		    <div className="submit">
+		        <button type="submit" onSubmit={handleSubmit}>Get my Report</button>
+		    </div>
+
 		</form>
     		
-		<p className="date">Start Date: March 4, 2024</p>
-    		<p className="date">End Date: March 10, 2024</p>
+		{showReport && (
+			<div>
+		            <p className="date">{`Start Date: ${report.start_date}`}</p>
+    		    	    <p className="date">{`End Date: ${report.end_date}`}</p>
 
-    		<p> This week you spent <span className="green">{`${report.ttot_week}`} hours</span> working 
-		    <br />
-        	    And you wasted a total of <span className="red">{`${report.twt_week}`} hours</span><br />
-        	    You can't be perfect, but you can be better! <br />
-        	    See you next week! <br />
-    		</p>
+    			    <p> Total Productive Time: <span className="green">{`${report.ttot_week} `} 
+				hour(s)</span> 
+		    	    <br />
+        	    	    Total Wasted Time: <span className="red">{`${report.twt_week}`} hours</span><br />
+        	    	    You can't be perfect, but you can be better! <br />
+        	    	    See you next week! <br />
+    			    </p>
+			</div>
+		)}
 	    </main>
 	);
 }

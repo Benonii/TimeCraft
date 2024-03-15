@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import "../newtask.css"
 
 export default function NewTask() {
 	const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ export default function NewTask() {
 				mode: 'no-cors'
 			});
 
-			if (response !== {}) {
+			if (response.ok) {
 				console.log('Form submitted successfully');
 			} else {
 				console.error('Failed to submit form');
@@ -47,8 +48,8 @@ export default function NewTask() {
 
 	return (
 	    <main className="new-task-container">
-		<h1 className="title">New Task</h1>
-    		<p className="intro"> A New Task, cool! <br />
+		<h1 className="task-title">New Task</h1>
+    		<p className="task-intro"> A New Task, cool! <br />
         	    But first, can I please see some ID?
     		</p>
 		<form onSubmit={handleSubmit}>
@@ -69,8 +70,9 @@ export default function NewTask() {
     		    <br />
     		    <input type="text" name="dailyGoal" onChange={handleChange} />
 		</form>
-
-		<button type="submit" onClick={handleSubmit}>Create</button>
+		<div className="submit">
+		    <button type="submit" onClick={handleSubmit}>Create</button>
+		</div>
 	    </main>
 	) 
 }

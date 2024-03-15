@@ -1,7 +1,21 @@
-/* TotalWastedTime.css */
+/* TotalProductiveTime.css */
+
+.twt-form {
+    margin-top: 50px;
+}
+
+.twt-form > label {
+    color: #243;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+.waste-report {
+    color: #566;
+    font-size: 1.3rem;
+}
 
 .wasted-time {
-    color: red; /* You can choose your desired color for wasted time */
-    font-size: 1.6rem;
-    margin-bottom: 20px;
+    color: red;
+    font-size: 1.4rem;
 }

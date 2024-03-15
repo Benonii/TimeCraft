@@ -42,7 +42,10 @@ def daily_report():
 
     daily_report['ttot_day'] = ttot_day
     daily_report['twt_day'] = twt_day
-
+    daily_report['date'] = date.replace(".", " ")
+    date = datetime.strptime(date, "%B.%d.%Y")
+    weekday = date.weekday()
+    daily_report['weekday'] = weekday
 
     return jsonify(daily_report)
 
@@ -84,22 +87,29 @@ def weekly_report():
         weekly_report = dict()
         weekly_report['ttot_week'] = ttot_week
         weekly_report['twt_week'] = twt_week
+        weekly_report['start_date'] = start_date
+        weekly_report['end_date'] = end_date
 
         return jsonify(weekly_report)
 
     today = datetime.today() 
 
     if week == "this_week":
+        year = datetime.today().strftime("%Y")
         return this_week(today)
     elif week == "last_week":
+        year = datetime.today().strftime("%Y")
         return this_week(today - timedelta(days=7))
     elif week == "custom":
+        custom_date = request.form.get('dateOfWeek')
         custom_date = custom_date.replace(' ', '.')
         custom_date = custom_date.replace('-', '.')
         custom_date = custom_date.replace(',', '.')
-        custom_date = custom_date.repalce(':', '.')
+        custom_date = custom_date.replace(':', '.')
 
-        return this_week(custom)
+        date = datetime.strptime(custom_date, "%B.%d.%Y")
+        year = date.strftime("%Y")
+        return this_week(date)
     else:
         return jsonify({})
 
@@ -110,7 +120,7 @@ def monthly_report():
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
     month = request.form.get('month')
-    print(month)
+    year = datetime.today().strftime("%Y")
 
     # total time on task month
     ttot_month = 0
@@ -130,10 +140,12 @@ def monthly_report():
         if task.user_id == user_id:
             ttot_month += log.time_on_task
             twt_month += log.time_wasted
-    
+ 
     monthly_report = {
             'ttot_month': ttot_month,
-            'twt_month': twt_month
+            'twt_month': twt_month,
+            'month': month,
+            'year': year
         }
 
     return jsonify(monthly_report)

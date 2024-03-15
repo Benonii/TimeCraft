@@ -1,6 +1,6 @@
 .sidebar {
     width: 20%;
-    height: 100vh;
+    height: 100%;
 }
 
 .sidebar--header {
@@ -31,11 +31,7 @@
 
 }
 
-.primary_btn:hover{
-	border: 0, 2px, 0, 2px green;
-}
-
-.primary_btn:active{
+.primary_btn:hover {
     background: linear-gradient(to right, rgba(70, 226, 13, 0.4) 0%, rgba(70, 226, 13, 1) 50%, rgba(70, 226, 13, 0.2) 95%);
     color: #fff;
 }

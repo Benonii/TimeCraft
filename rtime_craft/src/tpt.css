@@ -1,5 +1,15 @@
 /* TotalProductiveTime.css */
 
+.tpt-form {
+    margin-top: 50px;
+}
+
+.tpt-form > label {
+    color: #243;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
 .productive-time {
     color: green;
     font-size: 1.6rem;

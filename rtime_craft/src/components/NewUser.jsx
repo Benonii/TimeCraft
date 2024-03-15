@@ -3,8 +3,8 @@ import "../newuser.css";
 export default function NewUser() {
 	const [formData, setFormData] = useState({
 		username: '',
-		weekly_hours: '',
-		work_days: ''
+		weekly_hours: 0.0,
+		work_days: 0
 	});
 	
 	function handleChange(e) {
@@ -31,10 +31,9 @@ export default function NewUser() {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				body: params.toString(),
-				mode: 'no-cors'
 			});
 
-			if (response !== {}) {
+			if (response.ok) {
 				console.log('Form submitted successfully');
 			} else {
 				console.error('Failed to submit form');
@@ -47,29 +46,29 @@ export default function NewUser() {
 	return (
 	    <main className="new-user-container">
 		<h1 className="title">New User</h1>
-    		<p className="intro"> Hey There! Welcome to TimeCraft!. <br />
-		    My name is <span className="tiempo">Tiempo</span>. Now it's your turn
-		</p>
     	
 		<form onSubmit={handleSubmit}>
         	    <label htmlFor="username">What is your name?</label>
         	    <br />
         	    <input type="text" name="username" onChange={handleChange}/>
         	    <br /><br />
+		    <br /><br />
 
         	    <label htmlFor="weekly_hours">How many hours would you 
 			like to work per week?</label>
         	    <br />
         	    <input type="text" name="weekly_hours" onChange={handleChange}/>
         	    <br /><br />
+		    <br /><br />
 
         	    <label htmlFor="work_days">How many days per week do you
 			work?</label>
         	    <br />
         	    <input type="text" name="work_days" onChange={handleChange}/> 
     		</form>
-
-    <button type="submit" onClick={handleSubmit}>Submit</button>
+		<div className="submit">
+    		    <button type="submit" onClick={handleSubmit}>Save</button>
+		</div>
 	    </main>
 	);
 }

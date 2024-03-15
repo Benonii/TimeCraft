@@ -21,6 +21,8 @@ export default function TotalProductiveTime() {
 		console.log(formData);
 	};
 
+	const [showReport, setShowReport] = useState(false)
+
 	async function handleSubmit(e) {
 		e.preventDefault();
 		try {
@@ -46,22 +48,28 @@ export default function TotalProductiveTime() {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
+		setShowReport(true)
 	};
 
 	return (
 	    <div>
-		<form onSubmit={handleSubmit}>
-		    <label htmlFor="userId">Can I please have some ID? </label>
+		<form onSubmit={handleSubmit} className="tpt-form">
+		    <h1 className="title">Total Productive Time </h1>
+		    <label htmlFor="userId">Please Enter the User ID: </label>
+		    <br /><br />
 		    <input type="text" name="userId" onChange={handleChange} />
-		    <br />
-
-		    <button type="submit" onClick={handleSubmit}> Get my Report!</button>
+		    <br /><br /><br />
+		    <div className="submit">
+		        <button type="submit" onClick={handleSubmit}> Get my Report!</button>
+		    </div>
 		</form>
-
-	        <h1 className="title">Total Productive Time </h1>
-	        <h2 className="productive-time">So far, you have logged in {`${report.tpt} `}
-						hours of solid work. Keep it going!
-	        </h2>
+		{showReport && (
+		    <div>
+	        	<h2 className="productive-time">So far, you have logged in {`${report.tpt} `}
+							hours of solid work. Keep it going!
+	        	</h2>
+		    </div>
+		)}
 	    </div>
 	)
 }

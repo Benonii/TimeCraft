@@ -10,6 +10,8 @@ export default function TotalTimeOnTask() {
 		ttot: 0
 	});
 
+	const [showReport, setShowReport] = useState(false)
+
 	function handleChange(e) {
 		const { name, value } = e.target;
 		setFormData(prevState => ({
@@ -45,22 +47,27 @@ export default function TotalTimeOnTask() {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
+		setShowReport(true)
 	};
 
 	return (
 	    <main className="total-time-on-task-container">
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} className="ttot-form">
 		    <label htmlFor="task-id">Can I please have the Task ID?</label>
-    		    <br />
+    		    <br /><br />
     		    <input type="text" name="taskId" onChange={handleChange} />
 
     		    <br /><br />
 
-		    <button type="submit" onClick={handleSubmit}>Get my Report!</button>
+		    <div className="submit">
+		        <button type="submit" onClick={handleSubmit}>Get my Report!</button>
+		    </div>
 		</form>
 
+		{showReport && (
     		<h1 className="task-time">So far, you have spent {`${report.ttot}`} hours Training. Way to go!
 		</h1>
+		)}
 	    </main>
 	);
 };
