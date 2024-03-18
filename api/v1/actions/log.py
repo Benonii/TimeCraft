@@ -14,7 +14,11 @@ from datetime import datetime
 @app_actions.route('/new_log', methods=['POST'], strict_slashes=False)
 def new_log():
     """ Creates a new log """
+
+    # Empty Dictionary
     log_dict = dict()
+
+    # Save all the form data in variables
     task_id = request.form.get('taskId')
     log_dict['task_id'] = task_id
     task = storage.get_task(task_id)
@@ -22,10 +26,12 @@ def new_log():
     tot = float(request.form.get('timeOnTask'))
     tw = float(request.form.get('timeWasted'))
 
+    # Calculate the month, day and year of the day the log is being made
     month = datetime.today().strftime("%B")
     day = datetime.today().strftime("%-d")
     year = datetime.today().strftime("%Y")
 
+    # Store all the above data in the dictionary
     log_dict['month'] = month
     log_dict['day'] = day
     log_dict['year'] = year
@@ -34,10 +40,12 @@ def new_log():
     log_dict['time_on_task'] = tot
     log_dict['time_wasted'] = tw
 
+    # Update metrics that need to be changed on User and Task objects
     task.total_time_on_task += tot
     user.total_productive_time += tot
     user.total_wasted_time += tw
 
+    # Creates a new log object and saves it
     new_log = DailyLog(**log_dict)
     storage.new(new_log)
     storage.save()
