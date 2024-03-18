@@ -1,6 +1,5 @@
 #!/usr/bin/python
 """ This module contains tests for storage.py """
-
 import unittest
 from models import storage
 from models.user import User
