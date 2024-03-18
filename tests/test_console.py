@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ This module contains tests for timecraft.py """
-
 import unittest
 import sys
 from io import StringIO
