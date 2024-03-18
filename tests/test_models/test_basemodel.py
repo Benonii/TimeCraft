@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # Test module for our basemodel.py
-
 import unittest
 from datetime import datetime
 from models.basemodel import BaseModel
