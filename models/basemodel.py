@@ -46,6 +46,8 @@ class BaseModel:
         for key, value in self.__dict__.items():
             if value is not None:
                 dictionary[key] = value
+
+        # Makes sure the private attribute "class" is the class name
         dictionary["__class__"] = self.__class__.__name__
         return dictionary
 
