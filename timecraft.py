@@ -150,7 +150,7 @@ class TcCommand(cmd.Cmd):
 
             try:
                 user_id = storage.user_id
-                if user_id is None:
+                if user_id is None or user_id == "":
                     user_id = str(input("A new task. Cool! But first,"
                                         + " what is your ID?\n: "))
                     storage.user_id = user_id
@@ -251,7 +251,7 @@ class TcCommand(cmd.Cmd):
         """ Gets a list of all tasks associated with a user """
         try:
             user_id = storage.user_id
-            if user_id is None:
+            if user_id is None or user_id == "":
                 user_id = str(input("Can I please see some ID?\n: "))
                 storage.user_id = user_id
 
@@ -334,7 +334,7 @@ class TcCommand(cmd.Cmd):
         try:
             """ Get the total productive hours for a user """
             user_id = storage.user_id
-            if user_id is None:
+            if user_id == "" or user_id is None:
                 user_id = str(input("Can I please see some ID? :)\n: "))
                 storage.user_id = user_id
 
@@ -361,7 +361,7 @@ class TcCommand(cmd.Cmd):
         """ Get the total time wasted by a user """
         try:
             user_id = storage.user_id
-            if user_id is None:
+            if user_id is None or user_id == "":
                 user_id = str(input("Can I please see some ID? :)\n: "))
                 storage.user_id = user_id
 
@@ -389,7 +389,7 @@ class TcCommand(cmd.Cmd):
         """ Gets a list of all logs for a given day """
         try:
             user_id = storage.user_id
-            if user_id is None:
+            if user_id is None or user_id == "":
                 user_id = str(input("Can I please see some ID? :)\n: "))
                 storage.user_id = user_id
 
@@ -450,7 +450,7 @@ class TcCommand(cmd.Cmd):
         """ Gets a weekly report of time_on_task and time_wasted """
         try:
             user_id = storage.user_id
-            if user_id is None:
+            if user_id is None or user_id == "":
                 user_id = str(input("Can I please see some ID? :)\n : "))
                 storage.user_id = user_id
 
@@ -543,7 +543,7 @@ class TcCommand(cmd.Cmd):
         """ Get the total time on task and total wasted time for the month """
         try:
             user_id = storage.user_id
-            if user_id is None:
+            if user_id is None or user_id == "":
                 user_id = str(input("Can I please see some ID? :)\n : "))
                 storage.user_id = user_id
 
