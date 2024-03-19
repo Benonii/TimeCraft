@@ -31,9 +31,7 @@ export default function Main({actionId}) {
 				if (userID !== null) {
 					setUserId(userId);
 					console.log("Ladies and Gentlemen, we got him");
-				} else {
-					console.log("User ID is null, just thought you should know");
-				};
+				}
 			} else {
 				console.error("Couldn't get user");
 				console.log(response)

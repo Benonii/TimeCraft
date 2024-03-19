@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../twt.css"
 
-export default function TotalWastedTime() {
+export default function TotalWastedTime({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 		userId: '',
 	});
@@ -54,9 +54,14 @@ export default function TotalWastedTime() {
 	    <div>
 		<form onSubmit={handleSubmit} className="twt-form">
 		    <h1 className="title"> Total Wasted Time </h1>
-		    <label htmlFor="userId">Can I please have some ID? </label>
-		    <input type="text" name="userId" onChange={handleChange} />
-		    <br />
+		    {userId === "" && (
+			<div className="user-id">
+		 	    <label htmlFor="userId">Please enter the User ID:</label>
+    		    	    <br /><br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}  
 		    <div className="sumbit">
 		        <button type="sumbit" onClick={handleSubmit}>Get my Report!</button>
 		    </div>

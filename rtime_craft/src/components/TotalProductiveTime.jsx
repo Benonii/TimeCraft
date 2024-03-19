@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../tpt.css"
 
-export default function TotalProductiveTime() {
+export default function TotalProductiveTime({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 	userId: '',
 	date: ''
@@ -55,9 +55,14 @@ export default function TotalProductiveTime() {
 	    <div>
 		<form onSubmit={handleSubmit} className="tpt-form">
 		    <h1 className="title">Total Productive Time </h1>
-		    <label htmlFor="userId">Please Enter the User ID: </label>
-		    <br /><br />
-		    <input type="text" name="userId" onChange={handleChange} />
+		    {userId === "" && (
+			<div>
+    		    	    <label htmlFor="userId">Please enter the User ID</label>
+    		    	    <br /><br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}  
 		    <br /><br /><br />
 		    <div className="submit">
 		        <button type="submit" onClick={handleSubmit}> Get my Report!</button>

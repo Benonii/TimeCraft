@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../monthly.css"
 
-export default function MonthlyReport() {
+export default function MonthlyReport({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 		userId: '',
 		month: ''
@@ -30,7 +30,8 @@ export default function MonthlyReport() {
 		e.preventDefault();
 		try {
 		    const params = new URLSearchParams();
-		    params.append('userId', formData.userId);
+		    userId === "" && assignUser(formData.userId);
+		    params.append('userId', userId);
 		    params.append('month', formData.month);
 		    const response = await fetch(
 			'http://127.0.0.1:5001/tc/v1/monthly_report',
@@ -60,10 +61,15 @@ export default function MonthlyReport() {
 	    <main className="monthly-report-container">
 		<h1 className="monthly-title">Monthly Report </h1>
 		<form onSubmit={handleSubmit}>
-		    <label htmlFor="userId">Can I please have some ID? </label>
-		    <br />
-		    <input type="text" name="userId" onChange={handleChange} />
-		    <br /><br />
+		    {userId === "" && (
+			<div className="user-id">
+    		    	    <label htmlFor="userId">Please enter the User ID:</label>
+    		    	    <br /><br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}
+
 		    <label htmlFor="month" onChange={handleChange}>What month would you like to get a report for?
 		    </label>
     		    <br /><br />
