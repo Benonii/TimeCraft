@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../newtask.css"
 
-export default function NewTask() {
+export default function NewTask({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 		userId: '',
 		taskName: '',
@@ -23,7 +23,8 @@ export default function NewTask() {
 
 		try {
 			const params = new URLSearchParams();
-			params.append('userId', formData.userId);
+			userId === "" && assignUser(formData.userId);
+			params.append('userId', userId);
 			params.append('taskName', formData.taskName);
 			params.append('dailyGoal', formData.dailyGoal);
 
@@ -33,7 +34,6 @@ export default function NewTask() {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				body: params.toString(),
-				mode: 'no-cors'
 			});
 
 			if (response.ok) {
@@ -49,15 +49,18 @@ export default function NewTask() {
 	return (
 	    <main className="new-task-container">
 		<h1 className="task-title">New Task</h1>
-    		<p className="task-intro"> A New Task, cool! <br />
-        	    But first, can I please see some ID?
-    		</p>
 		<form onSubmit={handleSubmit}>
-    		    <label htmlFor="userId">User ID:</label>
-    		    <br />
-    		    <input type="text" name="userId" onChange={handleChange}/>
-
-    		    <br /><br />
+		    {userId === "" && (
+			<div className="user-id">
+			    <p className="task-intro"> A New Task, cool! <br />
+        	    	    But first, can I please see some ID?
+    			    </p>
+    		    	    <label htmlFor="userId">User ID:</label>
+    		    	    <br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}  
 
     		    <label htmlFor="taskName">What do you want to call this task?</label>
     		    <br />
