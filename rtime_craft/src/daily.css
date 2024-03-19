@@ -6,6 +6,7 @@
     height: 100%;
     width: 100%;
     line-height: 4rem;
+    position: fixed;
 }
 
 h1.title {
