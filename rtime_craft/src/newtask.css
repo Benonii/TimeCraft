@@ -5,6 +5,7 @@
     height: 100%;
     width: 100%;
     line-height: 4rem;
+    position: fixed;
 }
 
 h1.task-title {
@@ -31,7 +32,7 @@ form {
     padding-bottom: 50px;
 }
 
-form > label {
+form > label, form div > label {
     color: #243;
     font-size: 1.5rem;
     margin-bottom: 1px;

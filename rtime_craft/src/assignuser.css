@@ -1,33 +1,34 @@
-/* NewTask.css */
+/* NewUser.css */
 
-.new-log-container {
+.assign-user-container{
+    padding: 20px;
     background-color: #f5f5f5; /* A shade of white */
+    font-family: "Ojuju", sans-serif;
+    font-weight: 100;
     height: 100%;
-    width: 100%;
-    line-height: 4rem;
+    width: 70%;
     position: fixed;
 }
 
-h1.title {
-    margin-top: 10px;
+.title {
     color: gray;
     font-size: 3rem;
-    margin-bottom: 20px;
-    margin-left: 20px;
-}
-
-h1.task-title:hover {
-    color: #000;
+    margin-bottom: 80px;
 }
 
 .intro {
     color: #333; /* Dark gray */
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
     line-height: 1.5;
 }
 
+.tiempo {
+    color: green;
+}
+
 form {
+    width: 100%;
     margin-bottom: 20px;
     padding-bottom: 50px;
 }
@@ -39,6 +40,7 @@ form > label {
 }
 
 input[type="text"] {
+    border: none;
     border-radius: 12px;
     padding: 10px;
     width: 95%;
@@ -64,3 +66,18 @@ input:focus {
 	justify-content: center;
 }
 
+button {
+    border: 10px solid black;
+    border-radius: 15px;
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+
+}
+
+button:hover {
+    background-color: #b37a00;
+}

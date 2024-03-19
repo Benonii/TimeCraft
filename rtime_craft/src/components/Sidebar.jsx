@@ -15,6 +15,11 @@ export default function Sidebar(props){
                 <button className="primary_btn"
 	    		onClick={() => {props.onClick(1)}}>
 	    		New User</button>
+
+                <button className="primary_btn"
+	    		onClick={() => {props.onClick(10)}}>
+	    		Assign User</button>
+
                 <button className="primary_btn"
 	    		onClick={() => {props.onClick(2)}}>
 	    		New Task</button>
@@ -35,7 +40,7 @@ export default function Sidebar(props){
                 <button className="primary_btn"
 	    		onClick={() => {props.onClick(9)}}>
 	    		Total Time On Task</button>
-            </div>
+	    </div>
         </section>
     )
 }

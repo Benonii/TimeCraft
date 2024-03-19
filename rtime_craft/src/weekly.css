@@ -3,6 +3,7 @@
 .weekly-report-container {
     padding: 20px;
     background-color: #f5f5f5; /* A shade of white */
+    position: fixed;
 }
 
 label {

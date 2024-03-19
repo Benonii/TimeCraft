@@ -10,6 +10,7 @@ import MonthlyReport from "./MonthlyReport"
 import TotalProductiveTime from "./TotalProductiveTime"
 import TotalWastedTime from "./TotalWastedTime"
 import TotalTimeOnTask from "./TotalTimeOnTask"
+import AssignUser from "./AssignUser"
 
 export default function Main({actionId}) {
 	const [userId, setUserId] = React.useState("");
@@ -64,6 +65,7 @@ export default function Main({actionId}) {
 			};
 		};	
 	};
+
 	const actions = {
 		0: <Description />,
 		1: <NewUser assignUser={assignUser}/>,
@@ -75,6 +77,7 @@ export default function Main({actionId}) {
 		7: <TotalProductiveTime userId={userId} assignUser={assignUser} />,
 		8: <TotalWastedTime userId={userId} assignUser={assignUser} />,
 		9: <TotalTimeOnTask userId={userId} assignUser={assignUser} />,
+		10: <AssignUser assignUser={assignUser} />
 	}
 
 	let component = actions[actionId];

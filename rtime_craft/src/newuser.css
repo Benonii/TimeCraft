@@ -6,6 +6,7 @@
     font-family: "Ojuju", sans-serif;
     font-weight: 100;
     height: 100%;
+    position: fixed;
 }
 
 .title {

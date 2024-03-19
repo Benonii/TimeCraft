@@ -2,6 +2,7 @@
 
 .tpt-form {
     margin-top: 50px;
+    position: fixed;
 }
 
 .tpt-form > label {
