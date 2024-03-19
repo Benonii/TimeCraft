@@ -1,5 +1,10 @@
 # TimeCraft: Track Your Time and Productivity
 
+If you would like to read about the process of making this project:
+https://www.linkedin.com/pulse/timecraft-tale-obsession-creating-solutions-your-own-benoni-esckinder-fcr8e
+
+My LInkedIn: https://www.linkedin.com/in/benoni-esckinder-929220269/
+
 [Table of Contents](#table-of-contents)
 * [Project Goal](#project-goal)
 * [Features](#features)

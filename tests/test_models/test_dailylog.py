@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """ This module contains tasks for dailylog.py """
 
 import unittest
