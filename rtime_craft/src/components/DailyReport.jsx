@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../daily.css"
 
-export default function DailyReport() {
+export default function DailyReport({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 		userId: '',
 		date: ''
@@ -30,7 +30,8 @@ export default function DailyReport() {
 		e.preventDefault();
 		try {
 		    const params = new URLSearchParams();
-		    params.append('userId', formData.userId);
+		    userId === "" && assignUser(formData.userId);
+		    params.append('userId', userId);
 		    params.append('date', formData.date);
 		    const response = await fetch(
 			'http://127.0.0.1:5001/tc/v1/daily_report',
@@ -60,9 +61,15 @@ export default function DailyReport() {
 	    <main className="daily-report-container">
 		<h1 className="title">Daily Report</h1>
 		<form onSubmit={handleSubmit}>
-		    <label htmlFor="userId">Can I please have some ID? </label>
-		    <input type="text" name="userId" onChange={handleChange} />
-		    <br />
+		    {userId === "" && (
+			<div className="user-id">
+    		    	    <label htmlFor="userId">Please enter the User ID:</label>
+    		    	    <br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}  
+
 		    <label htmlFor="date">What day would you like to get a report for?
 		    </label>
     		    <br />

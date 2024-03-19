@@ -53,6 +53,7 @@ export default function TotalTimeOnTask() {
 	return (
 	    <main className="total-time-on-task-container">
 		<form onSubmit={handleSubmit} className="ttot-form">
+		    <h1 className="task-title"> Total Time on Task </h1>
 		    <label htmlFor="task-id">Can I please have the Task ID?</label>
     		    <br /><br />
     		    <input type="text" name="taskId" onChange={handleChange} />

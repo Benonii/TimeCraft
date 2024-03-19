@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../newuser.css";
-export default function NewUser() {
+export default function NewUser({assignUser}) {
 	const [formData, setFormData] = useState({
 		username: '',
 		weekly_hours: 0.0,
@@ -35,12 +35,16 @@ export default function NewUser() {
 
 			if (response.ok) {
 				console.log('Form submitted successfully');
+				const responseJSON = await response.json();
+				console.log(`user id: ${responseJSON.user_id}`);
+				assignUser(responseJSON.user_id);
 			} else {
 				console.error('Failed to submit form');
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
 		}
+
 	};
 
 	return (

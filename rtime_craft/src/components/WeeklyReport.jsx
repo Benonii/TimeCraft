@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import "../weekly.css"
 
-export default function WeeklyReport() {
+export default function WeeklyReport({userId, assignUser}) {
 	const [formData, setFormData] = useState({
 		userId: '',
 		week: '',
@@ -31,10 +31,12 @@ export default function WeeklyReport() {
 
 	async function handleSubmit(e) {
 		e.preventDefault();
+
 		try {
-		    const params = new URLSearchParams();
-		    params.append('userId', formData.userId);
-		    params.append('week', formData.week);
+			const params = new URLSearchParams();
+			userId === "" && assignUser(formData.userId);
+			params.append('userId', userId);
+			params.append('week', formData.week);
 		    params.append('dateOfWeek', formData.dateOfWeek)
 		    const response = await fetch(
 			'http://127.0.0.1:5001/tc/v1/weekly_report',
@@ -72,9 +74,15 @@ export default function WeeklyReport() {
 	    <main className="weekly-report-container">
 		<h1 className="title"> Weekly Report </h1>
 		<form onSubmit={handleSubmit}>
-		    <label htmlFor="userId">Please Enter your User ID: </label>
-		    <input type="text" name="userId" onChange={handleChange} />
-		    <br /><br />
+		    {userId === "" && (
+			<div className="user-id">
+    		    	    <label htmlFor="userId">Please enter the User ID:</label>
+    		    	    <br /><br />
+			    <input type="text" name="userId" onChange={handleChange}/>
+			    <br /><br />
+			</div>
+		    )}  
+
 		    <label htmlFor="week">What week would you like to get a report for?</label>
 		    <br />
         	        <div className="week-choice">
