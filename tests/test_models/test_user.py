@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ This module contains unittest for user.py """
-
 import unittest
 from models.user import User
 from models import storage

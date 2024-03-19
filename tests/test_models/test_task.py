@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ This module contains tests for task.py """
-
 import unittest
 import sqlalchemy
 from models.task import Task
