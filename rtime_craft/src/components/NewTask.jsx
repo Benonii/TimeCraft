@@ -7,6 +7,10 @@ export default function NewTask({ userId, assignUser }) {
     taskName: "",
     dailyGoal: 0, // Initialize as a number for validation
   });
+
+  const [taskIsCreated, setTaskIsCreated] = useState(false);
+  const [taskId, setTaskId] = useState("");
+
   const [errors, setErrors] = useState({}); // State for storing validation errors
 
   function handleChange(e) {
@@ -81,11 +85,16 @@ export default function NewTask({ userId, assignUser }) {
 			    'Content-Type': 'application/x-www-form-urlencoded'
 		  	 },
 		body: params.toString(),
-		mode: 'no-cors'
 	});
 
-	if (response !== {}) {
+	if (response.ok) {
 		console.log('Form submitted successfully');
+		const taskJson = await response.json();
+
+		if (taskJson !== {}) {
+		  setTaskIsCreated(true);
+		  setTaskId(taskJson.task_id);
+		}
 	} else {
 		console.error('Failed to submit form');
 	}
@@ -131,6 +140,11 @@ export default function NewTask({ userId, assignUser }) {
           </button>
         </div>
       </form>
+      
+      {taskIsCreated &&
+	      (<p> The task is saved. Your Task ID is {taskId}. Keep it safe</p>)
+      };
+
     </main>
   );
 }

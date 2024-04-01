@@ -24,6 +24,7 @@ export default function NewLog() {
 
   function validateInput(name, value) {
     const newErrors = { ...errors }; // Copy existing errors
+    let numValue = 0;
     switch (name) {
       case "taskId":
         if (!value) {
@@ -33,7 +34,7 @@ export default function NewLog() {
         }
         break;
       case "timeOnTask":
-        const numValue = parseFloat(value);
+         numValue = parseFloat(value);
         if (isNaN(numValue) || numValue < 0) {
           newErrors.timeOnTask = "Time spent on task must be a non-negative number.";
         } else {
@@ -103,7 +104,7 @@ export default function NewLog() {
         {errors.taskId && <span className="error-message">{errors.taskId}</span>}
 
         <label htmlFor="timeOnTask">
-          How much time did you spend on web-designing today?
+          How much time did you spend on this task today?
         </label>
         <br />
         <input type="text" name="timeOnTask" onChange={handleChange} />
