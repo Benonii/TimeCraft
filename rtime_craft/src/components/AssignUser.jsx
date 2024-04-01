@@ -44,9 +44,29 @@ export default function NewUser({ assignUser }) {
       return; // Prevent form submission if errors exist
     }
 
-    // Rest of your form submission logic here (unchanged)
-    // ...
-  }
+    try {
+		const params = new URLSearchParams();
+		params.append('userId', formData.userId);
+		const response = await fetch('http://127.0.0.1:5001/tc/v1/new_user', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: params.toString(),
+		});
+			
+	    	if (response.ok) {
+			console.log('Form submitted successfully');
+			const responseJSON = await response.json();
+			console.log(`user id: ${responseJSON.user_id}`);
+			assignUser(responseJSON.user_id);
+		} else {
+			console.error('Failed to submit form');
+		}	
+    } catch (error) {
+	console.error('Error submitting form:', error);
+    }
+  };
 
   return (
     <main className="assign-user-container">
@@ -77,4 +97,3 @@ export default function NewUser({ assignUser }) {
     </main>
   );
 }
-
