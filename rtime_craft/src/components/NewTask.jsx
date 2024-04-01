@@ -69,28 +69,29 @@ export default function NewTask({ userId, assignUser }) {
     // Rest of your form submission logic here (unchanged)
     // ...
     try {
-			const params = new URLSearchParams();
-			params.append('userId', formData.userId);
-			params.append('taskName', formData.taskName);
-			params.append('dailyGoal', formData.dailyGoal);
+	const params = new URLSearchParams();
+	userId === "" && assignUser(formData.userId);
+	params.append('userId', userId);
+	params.append('taskName', formData.taskName);
+	params.append('dailyGoal', formData.dailyGoal);
 
-			const response = await fetch('http://127.0.0.1:5001/tc/v1/new_task', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				body: params.toString(),
-				mode: 'no-cors'
-			});
+	const response = await fetch('http://127.0.0.1:5001/tc/v1/new_task', {
+		method: 'POST',
+		headers: {
+			    'Content-Type': 'application/x-www-form-urlencoded'
+		  	 },
+		body: params.toString(),
+		mode: 'no-cors'
+	});
 
-			if (response !== {}) {
-				console.log('Form submitted successfully');
-			} else {
-				console.error('Failed to submit form');
-			}
-		} catch (error) {
-			console.error('Error submitting form:', error);
-		}
+	if (response !== {}) {
+		console.log('Form submitted successfully');
+	} else {
+		console.error('Failed to submit form');
+	}
+    } catch (error) {
+	console.error('Error submitting form:', error);
+    }
   }
 
   return (
