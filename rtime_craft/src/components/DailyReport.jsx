@@ -38,15 +38,6 @@ export default function DailyReport({ userId, assignUser }) {
           delete newErrors.userId;
         }
         break;
-      case "date":
-        // Basic validation for YYYY-MM-DD format (can be improved)
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        if (!value || !regex.test(value)) {
-          newErrors.date = "Invalid date format. Use YYYY-MM-DD (e.g., 2024-03-19).";
-        } else {
-          delete newErrors.date;
-        }
-        break;
       default:
         break;
     }
@@ -66,9 +57,32 @@ export default function DailyReport({ userId, assignUser }) {
       return; // Prevent form submission if errors exist
     }
 
-    // Rest of your form submission logic here (unchanged)
-    // ...
+    try {
+		    const params = new URLSearchParams();
+		    params.append('userId', formData.userId);
+		    params.append('date', formData.date);
+		    const response = await fetch(
+			'http://84.204.6.209:5001/tc/v1/daily_report',
+			{
+			    method: 'POST',
+			    headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+				},
+			    body: params.toString(),
+			});
+		    if (response.ok) {
+			    const reportJson =  await response.json();
+			    if (reportJson !== {}) {
+			      setReport(reportJson)
+			    } 
+			    console.log(report)
+		    } else {
+			    console.error("I am not okay!");
+		    }
 
+		} catch(error) {
+			console.error("Error submitting form:", error);
+		};
     setShowReport(true);
   }
 
@@ -103,9 +117,7 @@ export default function DailyReport({ userId, assignUser }) {
         </div>
       </form>
 
-      <br /><br />
-
-      {showReport && (
+      {showReport ? (
         <div>
           <h1 className="report-title">{`Date: ${report.weekday}, ${report.date}`}</h1>
           <p className="report-content">
@@ -115,7 +127,7 @@ export default function DailyReport({ userId, assignUser }) {
             Tomorrow is always another day. Salute!
           </p>
         </div>
-      )}
+      ) : (<p> No report to show </p>)}
     </main>
   );
 }

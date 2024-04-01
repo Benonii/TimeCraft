@@ -18,7 +18,7 @@ export default function Main({actionId}) {
 	async function getUser() {
 		try {
 
-			const response = await fetch("http://localhost:5001/tc/v1/get_session_user",
+			const response = await fetch("http://127.0.0.1:5001/tc/v1/get_session_user",
 						{
 							method: 'GET',
 							headers: {
@@ -48,7 +48,7 @@ export default function Main({actionId}) {
 			console.error("Please enter a valid User ID")
 		} else {
 			const obj = { 'userID': userID }
-			const response = await fetch("http://localhost:5001/tc/v1/switch_user",
+			const response = await fetch("http://127.0.0.1:5001/tc/v1/switch_user",
 						{
 							method: 'POST',
 							headers: {

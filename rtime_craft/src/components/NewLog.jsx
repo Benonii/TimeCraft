@@ -67,8 +67,29 @@ export default function NewLog() {
       return; // Prevent form submission if errors exist
     }
 
-    // Rest of your form submission logic here (unchanged)
-    // ...
+    try {
+			const params = new URLSearchParams();
+			params.append('taskId', formData.taskId)
+			params.append('timeOnTask', formData.timeOnTask)
+			params.append('timeWasted', formData.timeWasted)
+
+			const response = await fetch ("http://127.0.0.1:5001/tc/v1/new_log", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: params.toString(),
+				mode: 'no-cors'
+				});
+
+				if (response !== {}) {
+					console.log("Form submitted successfully")
+				} else {
+					console.error("Failed to submit form")
+				};
+		} catch(e) {
+			console.error("Error submitting form:", e);
+		}
   }
 
   return (
