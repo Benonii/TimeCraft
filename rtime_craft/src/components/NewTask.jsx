@@ -9,8 +9,8 @@ export default function NewTask({ userId, assignUser }) {
   });
 
   const [taskIsCreated, setTaskIsCreated] = useState(false);
+  const [message, setMessage] = useState();
   const [taskId, setTaskId] = useState("");
-
   const [errors, setErrors] = useState({}); // State for storing validation errors
 
   function handleChange(e) {
@@ -30,15 +30,15 @@ export default function NewTask({ userId, assignUser }) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "userId":
-        if (!value) {
-          newErrors.userId = "User ID cannot be empty.";
+        if (!value || value === "") {
+          newErrors.userId = (<p className="input-errors">User ID cannot be empty.</p>);
         } else {
           delete newErrors.userId; // Remove error if valid
         }
         break;
       case "taskName":
-        if (!value) {
-          newErrors.taskName = "Task name cannot be empty.";
+        if (!value || value === "") {
+          newErrors.taskName = (<p className="input-errors">Task name cannot be empty.</p>);
         } else {
           delete newErrors.taskName;
         }
@@ -46,7 +46,7 @@ export default function NewTask({ userId, assignUser }) {
       case "dailyGoal":
         const numValue = parseFloat(value);
         if (isNaN(numValue) || numValue <= 0) {
-          newErrors.dailyGoal = "Daily goal must be a positive number.";
+          newErrors.dailyGoal = (<p className="input-errors">Daily goal must be a positive number.</p>);
         } else {
           delete newErrors.dailyGoal;
         }
@@ -60,22 +60,34 @@ export default function NewTask({ userId, assignUser }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    // Check for empty submits
+    const emptyTaskName = validateInput('taskName', formData.taskName);
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
+
     if (hasErrors) {
-      console.error("Please fix form errors before creating a task:");
+      setMessage((<p className="input-errors">Please fix form errors before creating a task.</p>));
       for (const error in errors) {
         console.error("- " + errors[error]); // Log each specific error
       }
       return; // Prevent form submission if errors exist
-    }
+    };
+
+    if (Object.keys(emptyTaskName).length > 0) {
+      setMessage((<p className="input-errors"> Task name can not be empty </p>));
+      return;
+    };
 
     // Rest of your form submission logic here (unchanged)
     // ...
     try {
 	const params = new URLSearchParams();
-	userId === "" && assignUser(formData.userId);
-	params.append('userId', userId);
+	if (userId === "") {
+	  params.append('userId', formData.userId);
+	} else {
+	  console.log(userId);
+	  params.append('userId', userId);
+	}
 	params.append('taskName', formData.taskName);
 	params.append('dailyGoal', formData.dailyGoal);
 
@@ -91,12 +103,16 @@ export default function NewTask({ userId, assignUser }) {
 		console.log('Form submitted successfully');
 		const taskJson = await response.json();
 
-		if (taskJson !== {}) {
-		  setTaskIsCreated(true);
+		if (taskJson !== {}) { 
 		  setTaskId(taskJson.task_id);
-		}
+		  setMessage((<p>
+			  The task is saved. Your Task ID is {taskId}. Keep it safe
+			  </p>));
+		} else {
+		  setMessage((<p> Task creation failed. Try again </p>));
+		};
 	} else {
-		console.error('Failed to submit form');
+		console.log('Failed to submit form');
 	}
     } catch (error) {
 	console.error('Error submitting form:', error);
@@ -141,9 +157,7 @@ export default function NewTask({ userId, assignUser }) {
         </div>
       </form>
       
-      {taskIsCreated &&
-	      (<p> The task is saved. Your Task ID is {taskId}. Keep it safe</p>)
-      };
+      {message};
 
     </main>
   );

@@ -46,6 +46,7 @@ export default function Main({actionId}) {
 	async function assignUser(userID) {	
 		if (userID === null || userID === "") {
 			console.error("Please enter a valid User ID")
+			return ({});
 		} else {
 			const obj = { 'userID': userID }
 			const response = await fetch("http://127.0.0.1:5001/tc/v1/switch_user",
@@ -57,13 +58,18 @@ export default function Main({actionId}) {
 							body: JSON.stringify(obj),
 						})
 			if (response.ok) {
-				setUserId(userID);
-				console.log("User Changed Successfully");
-				console.log(userId);
+				const responseJson = await response.json();
+				if (responseJson !== {}) {
+				  setUserId(userID);
+				  return ({'name': responseJson.name});
+				} else {
+				  return ({});
+				}
 			} else {
 				console.error("Couldn't switch user");
 			};
-		};	
+		};
+		return
 	};
 
 	const actions = {

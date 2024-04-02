@@ -59,10 +59,11 @@ export default function DailyReport({ userId, assignUser }) {
 
     try {
 		    const params = new URLSearchParams();
-		    params.append('userId', formData.userId);
+	    	    userId === "" && assignUser(formData.userId);
+		    params.append('userId', userId);
 		    params.append('date', formData.date);
 		    const response = await fetch(
-			'http://84.204.6.209:5001/tc/v1/daily_report',
+			'http://127.0.0.1:5001/tc/v1/daily_report',
 			{
 			    method: 'POST',
 			    headers: {

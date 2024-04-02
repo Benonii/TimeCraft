@@ -8,6 +8,7 @@ export default function TotalTimeOnTask() {
 
   const [report, setReport] = useState({
     ttot: 0,
+    taskName: ""
   });
 
   const [errors, setErrors] = useState({}); // State to store validation errors
@@ -96,7 +97,7 @@ export default function TotalTimeOnTask() {
 
       {showReport && (
         <h1 className="task-time">
-          So far, you have spent {`${report.ttot}`} hours Training. Way to go!
+          So far, you have spent {`${report.ttot}`} hours on {`${report.taskName}`}. Way to go
         </h1>
       )}
     </main>

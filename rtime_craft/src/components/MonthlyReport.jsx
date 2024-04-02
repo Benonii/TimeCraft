@@ -22,8 +22,6 @@ export default function MonthlyReport({ userId, assignUser }) {
       ...prevState,
       [name]: value,
     }));
-
-    console.log(formData); // For debugging purposes (can be removed)
   }
 
   async function handleSubmit(e) {
@@ -31,8 +29,11 @@ export default function MonthlyReport({ userId, assignUser }) {
 
     try {
       const params = new URLSearchParams();
-      userId === "" && assignUser(formData.userId);
-      params.append("userId", userId);
+      if (userId === "") {
+	params.append('userId', formData.userId);
+      } else {
+      	  params.append("userId", userId);
+      }
       params.append("month", formData.month);
 
       const response = await fetch(
@@ -48,7 +49,10 @@ export default function MonthlyReport({ userId, assignUser }) {
 
       if (response.ok) {
         const reportJson = await response.json();
-        setReport(reportJson);
+	if (reportJson !== {}) {
+          setReport(reportJson);
+	}
+
         console.log(reportJson); // For debugging purposes (can be removed)
       } else {
         console.error("I am not okay!");

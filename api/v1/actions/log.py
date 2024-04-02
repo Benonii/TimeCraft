@@ -23,6 +23,10 @@ def new_log():
     log_dict['task_id'] = task_id
     task = storage.get_task(task_id)
     user = storage.get_user(task.user_id)
+
+    if task is None or user is None:
+        return jsonify({})
+
     tot = float(request.form.get('timeOnTask'))
     tw = float(request.form.get('timeWasted'))
 

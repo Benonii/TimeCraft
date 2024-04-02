@@ -23,6 +23,9 @@ def new_task():
     # Get the User from storage
     user = storage.get_user(user_id)
 
+    if user is None:
+        return jsonify({})
+
     # Assign form data about Task to the empty dictionary
     task_dict['user_id'] = user_id
     task_dict['task_name'] = request.form.get('taskName')
@@ -35,7 +38,7 @@ def new_task():
     storage.new(new_task)
     storage.save()
 
-    return jsonify({'Task ID': new_task.id})
+    return jsonify({'task_id': new_task.id})
 
 
 @app_actions.route('/all_tasks', methods=['GET'], strict_slashes=False)
@@ -67,7 +70,12 @@ def total_time_on_task():
     # Gets a specific task from storage using the Task ID
     task = storage.get_task(task_id)
 
-    return jsonify({'ttot': task.total_time_on_task})
+    if task is None:
+        return jsonify({})
+
+    return jsonify({'ttot': task.total_time_on_task,
+                    'taskName': task.task_name
+                    })
 
 
 @app_actions.route("/delete_task", methods=['DELETE'], strict_slashes=False)
