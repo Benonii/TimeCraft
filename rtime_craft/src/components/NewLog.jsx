@@ -8,6 +8,7 @@ export default function NewLog() {
     timeWasted: "",
   });
   const [errors, setErrors] = useState({}); // State for storing validation errors
+  const [message, setMessage] = useState();
 
   function handleChange(e) {
     e.preventDefault(); // Prevent unnecessary default behavior
@@ -27,8 +28,8 @@ export default function NewLog() {
     let numValue = 0;
     switch (name) {
       case "taskId":
-        if (!value) {
-          newErrors.taskId = "Task ID cannot be empty.";
+        if (value.length !== 36) {
+          newErrors.taskId = (<p className="input-error">Task ID must be exactly 36 characters.</p>);
         } else {
           delete newErrors.taskId;
         }
@@ -36,7 +37,8 @@ export default function NewLog() {
       case "timeOnTask":
          numValue = parseFloat(value);
         if (isNaN(numValue) || numValue < 0) {
-          newErrors.timeOnTask = "Time spent on task must be a non-negative number.";
+          newErrors.timeOnTask = (<p className="input-error">
+		  Time spent on task must be a non-negative number.</p>)
         } else {
           delete newErrors.timeOnTask;
         }
@@ -44,7 +46,8 @@ export default function NewLog() {
       case "timeWasted":
         numValue = parseFloat(value);
         if (isNaN(numValue) || numValue < 0) {
-          newErrors.timeWasted = "Time wasted must be a non-negative number.";
+          newErrors.timeWasted = (<p className="input-error">
+		  Time wasted must be a non-negative number.</p>)
         } else {
           delete newErrors.timeWasted;
         }
@@ -58,14 +61,32 @@ export default function NewLog() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+   
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error("Please fix form errors before logging:");
+      setMessage((<p className="input-errors">Please fix form errors before logging</p>));
       for (const error in errors) {
         console.error("- " + errors[error]); // Log each specific error
       }
       return; // Prevent form submission if errors exist
+    }
+
+    // Check for empty submission
+    const emptyTaskId = validateInput('taskId', formData.taskId);
+    const emptyTimeOnTask = validateInput('timeOnTask', formData.timeOnTask);
+    const emptyTimeWasted = validateInput('timeWasted', formData.timeWasted);
+    if (Object.keys(emptyTaskId).length > 0) {
+      setMessage((<p className="input-errors">Task ID can not be empty </p>))
+      return;
+    }
+    if (Object.keys(emptyTimeOnTask).length > 0) {
+      setMessage((<p className="input-errors">Time on task can not be empty </p>))
+      return;
+    }
+    if (Object.keys(emptyTimeWasted).length > 0) {
+      setMessage((<p className="input-errors">Time Wasted can not be empty </p>))
+      return;
     }
 
     try {
@@ -80,11 +101,18 @@ export default function NewLog() {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				body: params.toString(),
-				mode: 'no-cors'
 				});
 
-				if (response !== {}) {
-					console.log("Form submitted successfully")
+				if (response.ok) {
+					const reportJson = await response.json();
+					if (reportJson.log_date !== undefined) {
+					  setMessage((<p>
+						  Log recorded.<br />
+						  Log Date: <b> {`${reportJson.log_date}`} </b>
+						  </p>))
+					} else {
+					  setMessage((<p> Failed to record log. Please try again </p>))
+					}
 				} else {
 					console.error("Failed to submit form")
 				};
@@ -100,16 +128,16 @@ export default function NewLog() {
         <label htmlFor="taskId">What is the Task ID?</label>
         <br />
         <input type="text" name="taskId" onChange={handleChange} />
-        <br /><br />
         {errors.taskId && <span className="error-message">{errors.taskId}</span>}
+ 	<br />
 
         <label htmlFor="timeOnTask">
           How much time did you spend on this task today?
         </label>
         <br />
         <input type="text" name="timeOnTask" onChange={handleChange} />
-        <br /><br />
         {errors.timeOnTask && <span className="error-message">{errors.timeOnTask}</span>}
+        <br />
 
         <label htmlFor="timeWasted">
           How much time have you wasted today?
@@ -117,9 +145,10 @@ export default function NewLog() {
           (It's okay, I won't judge)
         </label>
         <br />
-        <input type="text" name="timeWasted" onChange={handleChange} />
-        <br /><br />
+
+	<input type="text" name="timeWasted" onChange={handleChange} />
         {errors.timeWasted && <span className="error-message">{errors.timeWasted}</span>}
+        <br />
 
         <div className="submit">
           <button type="submit" onClick={handleSubmit}>
@@ -127,6 +156,7 @@ export default function NewLog() {
           </button>
         </div>
       </form>
+      {message}
     </main>
   );
 }

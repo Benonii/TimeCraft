@@ -70,7 +70,7 @@ export default function NewUser ({ assignUser }) {
       return; // Prevent form submission if errors exist
     }
     if (Object.keys(emptyUserName).length > 0) {
-      setMessage(<p> Username can not be empty </p>);
+      setMessage(<p className="input-errors"> Username can not be empty </p>);
       return;
     }
 
@@ -166,7 +166,7 @@ export default function NewUser ({ assignUser }) {
         </span>
         <br /><br />
 
-        <div className='user-submit'>
+        <div className='submit'>
           <button type='submit' onClick={handleSubmit}>
             Create User
           </button>

@@ -20,13 +20,14 @@ def new_log():
 
     # Save all the form data in variables
     task_id = request.form.get('taskId')
+    print(task_id)
     log_dict['task_id'] = task_id
     task = storage.get_task(task_id)
-    user = storage.get_user(task.user_id)
-
-    if task is None or user is None:
+    if task is None:
+        print("No task with that ID")
         return jsonify({})
 
+    user = storage.get_user(task.user_id)
     tot = float(request.form.get('timeOnTask'))
     tw = float(request.form.get('timeWasted'))
 
@@ -54,4 +55,4 @@ def new_log():
     storage.new(new_log)
     storage.save()
 
-    return jsonify({'Log Date': new_log.date})
+    return jsonify({'log_date': new_log.date})
