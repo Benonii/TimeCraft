@@ -57,7 +57,12 @@ export default function TotalProductiveTime({ userId, assignUser }) {
 
     try {
       const params = new URLSearchParams();
-      params.append("userId", formData.userId);
+      if (userId === "") {
+	params.append("userId", formData.userId);
+      } else {
+        params.append("userId", userId);
+      };
+
       const response = await fetch("http://127.0.0.1:5001/tc/v1/total_productive_time", {
         method: "POST",
         headers: {
@@ -99,6 +104,7 @@ export default function TotalProductiveTime({ userId, assignUser }) {
           </button>
         </div>
       </form>
+
       {showReport && (
         <div>
           <h2 className="productive-time">

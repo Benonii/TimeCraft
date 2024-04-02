@@ -56,7 +56,12 @@ export default function TotalWastedTime({ userId, assignUser }) {
 
     try {
       const params = new URLSearchParams();
-      params.append("userId", formData.userId);
+      if (userId === "") {
+	params.append('userId', formData.userId);
+      } else {
+        params.append("userId", userId);
+      };
+
       const response = await fetch("http://127.0.0.1:5001/tc/v1/total_wasted_time", {
         method: "POST",
         headers: {

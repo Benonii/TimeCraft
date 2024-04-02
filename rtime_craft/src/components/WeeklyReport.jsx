@@ -67,30 +67,33 @@ export default function WeeklyReport({ userId, assignUser }) {
     }
 
     try {
-		    const params = new URLSearchParams();
-		    params.append('userId', formData.userId);
-		    params.append('week', formData.week);
-		    const response = await fetch(
-			'http://127.0.0.1:5001/tc/v1/weekly_report',
-			{
-			    method: 'POST',
-			    headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-				},
-			    body: params.toString(),
-			});
-		    if (response.ok) {
-			    const reportJson =  await response.json();
-			    setReport(reportJson)
-			    console.log(report)
-		    } else {
-			    console.error("I am not okay!");
-		    }
+	const params = new URLSearchParams();
+	if (userId === "") {
+	  params.append('userId', formData.userId);
+	} else {
+	  params.append('userId', userId);
+	}
+	params.append('week', formData.week);
+	const response = await fetch(
+	  'http://127.0.0.1:5001/tc/v1/weekly_report',
+	  {
+	    method: 'POST',
+	    headers: {
+		'Content-Type': 'application/x-www-form-urlencoded'
+	    },
+	    body: params.toString(),
+	});
+	if (response.ok) {
+	    const reportJson =  await response.json();
+	    setReport(reportJson)
+	    console.log(report)
+	} else {
+	    console.error("I am not okay!");
+	}
 
-		} catch(error) {
-			console.error("Error submitting form:", error);
-		};
-
+    } catch(error) {
+	console.error("Error submitting form:", error);
+  };
     setShowReport(true);
   }
 

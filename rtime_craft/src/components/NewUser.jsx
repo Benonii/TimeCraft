@@ -7,7 +7,8 @@ export default function NewUser ({ assignUser }) {
     weekly_hours: 0.0,
     work_days: 0
   });
-  const [errors, setErrors] = useState({}); // State for storing validation errors
+  const [errors, setErrors] = useState({}); // State for storing validation errors 
+  const [message, setMessage] = useState();
 
   function handleChange (e) {
     const { name, value } = e.target;
@@ -18,22 +19,26 @@ export default function NewUser ({ assignUser }) {
     setErrors(newErrors);
   }
 
+
   function validateInput (name, value) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case 'username':
-        if (!value) {
-          newErrors.username = 'Username cannot be empty.';
+        if (!value || value === "") {
+          newErrors.username = (<p className="input-error">
+		  		Username cannot be empty. </p>);
         } else if (value.length < 3) {
-          newErrors.username = 'Username must be at least 3 characters long.';
+          newErrors.username = (<p className="input-error">
+		  		Username must be at least 3 characters long.</p>);
         } else {
           delete newErrors.username; // Remove error if valid
         }
         break;
       case 'weekly_hours':
         const numValue = parseFloat(value);
-        if (isNaN(numValue) || numValue < 0) {
-          newErrors.weekly_hours = 'Weekly hours must be a positive number.';
+        if (isNaN(numValue) || numValue < 0 || numValue > 100) {
+          newErrors.weekly_hours = (<p className="input-error">
+		  		    Weekly hours must be a positive number between 0 and 100.</p>);
         } else {
           delete newErrors.weekly_hours;
         }
@@ -41,7 +46,8 @@ export default function NewUser ({ assignUser }) {
       case 'work_days':
         const intValue = parseInt(value);
         if (isNaN(intValue) || intValue < 0 || intValue > 7) {
-          newErrors.work_days = 'Work days must be a number between 0 and 7.';
+          newErrors.work_days = (<p className="input-error">
+		  		 Work days must be a number between 1 and 7.</p>);
         } else {
           delete newErrors.work_days;
         }
@@ -56,12 +62,19 @@ export default function NewUser ({ assignUser }) {
     e.preventDefault();
 
     // Check for any remaining errors before submission
+    const emptyUserName = validateInput('username', formData.username);
+
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error('Please fix form errors before submitting.');
+      setMessage(<p className="input-errors">Please fix form errors before submitting</p>);
       return; // Prevent form submission if errors exist
     }
-    		try {
+    if (Object.keys(emptyUserName).length > 0) {
+      setMessage(<p> Username can not be empty </p>);
+      return;
+    }
+
+    try {
       const params = new URLSearchParams();
       params.append('username', formData.username);
       params.append('weekly_hours', formData.weekly_hours);
@@ -75,12 +88,26 @@ export default function NewUser ({ assignUser }) {
       });
 
       if (response.ok) {
-        console.log('Form submitted successfully');
         const responseJSON = await response.json();
-        console.log(`user id: ${responseJSON.user_id}`);
-        assignUser(responseJSON.user_id);
+	if (responseJSON !== {}) {
+	  console.log("Form submitted successfully");
+	  setMessage((
+		  <p>
+		    User created successfully.<br /> 
+		    Here is the User id: {responseJSON.user_id}<br />
+		    Keep it safe, you might need it later.
+		  </p>
+	  ));
+          console.log(`user id: ${responseJSON.use}`)
+          assignUser(responseJSON.user_id);
+        } else {
+	  setMessage((
+		  <p> Operation failed. Please try again
+		  </p>
+	  ));
+	}
       } else {
-        console.error('Failed to submit form');
+	 console.error('Failed to submit form');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -139,12 +166,14 @@ export default function NewUser ({ assignUser }) {
         </span>
         <br /><br />
 
-        <div className='submit'>
+        <div className='user-submit'>
           <button type='submit' onClick={handleSubmit}>
-            Save
+            Create User
           </button>
         </div>
       </form>
+
+      {message}
     </main>
   );
 }

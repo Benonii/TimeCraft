@@ -154,11 +154,11 @@ def monthly_report():
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
     month = request.form.get('month')
-    year = datetime.today().strftime("%Y")
+    year = int(datetime.today().strftime("%Y"))
 
     # total time on task month
     ttot_month = 0
-    # total wasted timme month
+    # total wasted time month
     twt_month = 0
 
     # Get all logs in storage and filter by month
