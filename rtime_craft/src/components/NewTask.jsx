@@ -30,15 +30,15 @@ export default function NewTask({ userId, assignUser }) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "userId":
-        if (!value || value === "") {
-          newErrors.userId = (<p className="input-errors">User ID cannot be empty.</p>);
+        if (!value || value.length !== 36) {
+          newErrors.userId = (<p className="input-error">User ID must be exactly 36 characters.</p>);
         } else {
           delete newErrors.userId; // Remove error if valid
         }
         break;
       case "taskName":
         if (!value || value === "") {
-          newErrors.taskName = (<p className="input-errors">Task name cannot be empty.</p>);
+          newErrors.taskName = (<p className="input-error">Task name cannot be empty.</p>);
         } else {
           delete newErrors.taskName;
         }
@@ -46,7 +46,7 @@ export default function NewTask({ userId, assignUser }) {
       case "dailyGoal":
         const numValue = parseFloat(value);
         if (isNaN(numValue) || numValue <= 0) {
-          newErrors.dailyGoal = (<p className="input-errors">Daily goal must be a positive number.</p>);
+          newErrors.dailyGoal = (<p className="input-error">Daily goal must be a positive number.</p>);
         } else {
           delete newErrors.dailyGoal;
         }
@@ -61,15 +61,14 @@ export default function NewTask({ userId, assignUser }) {
     e.preventDefault();
 
     // Check for empty submits
+    const emptyUserId = userId === "" ? validateInput('userId', formData.userId) : null;
     const emptyTaskName = validateInput('taskName', formData.taskName);
+    const emptyDailyGoal = validateInput('dailyGoal', formData.dailyGoal);
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
 
     if (hasErrors) {
       setMessage((<p className="input-errors">Please fix form errors before creating a task.</p>));
-      for (const error in errors) {
-        console.error("- " + errors[error]); // Log each specific error
-      }
       return; // Prevent form submission if errors exist
     };
 
@@ -77,9 +76,15 @@ export default function NewTask({ userId, assignUser }) {
       setMessage((<p className="input-errors"> Task name can not be empty </p>));
       return;
     };
+    if (Object.keys(emptyDailyGoal).length > 0) {
+      setMessage((<p className="input-errors">Daily Goal has to be greater than 0</p>));
+      return;
+    };
+    if (Object.keys(emptyUserId).length > 0) {
+      setMessage((<p className="input-errors">User ID to be can not be empty</p>));
+      return;
+    };
 
-    // Rest of your form submission logic here (unchanged)
-    // ...
     try {
 	const params = new URLSearchParams();
 	if (userId === "") {
@@ -106,7 +111,7 @@ export default function NewTask({ userId, assignUser }) {
 		if (taskJson !== {}) { 
 		  setTaskId(taskJson.task_id);
 		  setMessage((<p>
-			  The task is saved. Your Task ID is {taskId}. Keep it safe
+			  The task is saved. Your Task ID is {`${taskId}`}. Keep it safe
 			  </p>));
 		} else {
 		  setMessage((<p> Task creation failed. Try again </p>));
@@ -125,30 +130,32 @@ export default function NewTask({ userId, assignUser }) {
       <form onSubmit={handleSubmit}>
         {userId === "" && (
           <div className="user-id">
-            <p className="task-intro">
-              A New Task, cool! <br /> But first, can I please see some ID?
-            </p>
             <label htmlFor="userId">User ID:</label>
             <br />
-            <input type="text" name="userId" onChange={handleChange} />
-            <br /><br />
+            <input 
+		type="text"
+		name="userId"
+		onChange={handleChange}
+		// Display error message below input if it exists 
+	    />
             {errors.userId && <span className="error-message">{errors.userId}</span>}
+	    <br />
           </div>
         )}
 
         <label htmlFor="taskName">What do you want to call this task?</label>
         <br />
         <input type="text" name="taskName" onChange={handleChange} />
-        <br /><br />
         {errors.taskName && <span className="error-message">{errors.taskName}</span>}
+        <br />
 
         <label htmlFor="dailyGoal">
           How many hours would you like to dedicate to this task?
         </label>
         <br />
         <input type="text" name="dailyGoal" onChange={handleChange} />
-        <br /><br />
         {errors.dailyGoal && <span className="error-message">{errors.dailyGoal}</span>}
+        <br />
 
         <div className="submit">
           <button type="submit" onClick={handleSubmit}>
@@ -157,7 +164,7 @@ export default function NewTask({ userId, assignUser }) {
         </div>
       </form>
       
-      {message};
+      {message}
 
     </main>
   );

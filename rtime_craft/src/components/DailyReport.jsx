@@ -4,7 +4,7 @@ import "../daily.css";
 export default function DailyReport({ userId, assignUser }) {
   const [formData, setFormData] = useState({
     userId: "",
-    date: "",
+    date: " ",
   });
   const [report, setReport] = useState({
     weekday: "",
@@ -13,6 +13,7 @@ export default function DailyReport({ userId, assignUser }) {
     date: "",
   });
   const [errors, setErrors] = useState({}); // State for storing validation errors
+  const [message, setMessage] = useState();
   const [showReport, setShowReport] = useState(false);
 
   function handleChange(e) {
@@ -32,8 +33,8 @@ export default function DailyReport({ userId, assignUser }) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "userId":
-        if (!value) {
-          newErrors.userId = "User ID cannot be empty.";
+        if (value.length !== 36) {
+          newErrors.userId = (<p className="input-error">User ID must be exactly 36 characters</p>);
         } else {
           delete newErrors.userId;
         }
@@ -59,8 +60,9 @@ export default function DailyReport({ userId, assignUser }) {
 
     try {
 		    const params = new URLSearchParams();
-	    	    userId === "" && assignUser(formData.userId);
-		    params.append('userId', userId);
+	    	    userId === ""
+	    		? params.append('userId', formData.userId)
+	    		: params.append('userId', userId);
 		    params.append('date', formData.date);
 		    const response = await fetch(
 			'http://127.0.0.1:5001/tc/v1/daily_report',
@@ -73,10 +75,29 @@ export default function DailyReport({ userId, assignUser }) {
 			});
 		    if (response.ok) {
 			    const reportJson =  await response.json();
-			    if (reportJson !== {}) {
+			    if (reportJson.date !== undefined) {
 			      setReport(reportJson)
-			    } 
-			    console.log(report)
+			      console.log(reportJson);
+			      setMessage(
+				      <div>
+         	 			<h1 className="report-title">
+				      		{`Date: ${report.date}`}</h1>
+          				<p className="report-content">
+            				Productive Time:
+				      <span className="green">{` ${report.ttot_day}`} hour(s)
+				      </span>
+            				<br /> Good Job! <br />
+            				Wasted time:
+				      <span className="red">{` ${report.twt_day}`} hour(s)</span>
+				      <br />
+            				Tomorrow is always another day. Salute!
+          				</p>
+        			      </div>)
+			    } else {
+			      setMessage(<p>
+				      Looks like there is no activity for that date.<br />
+				      Try another date</p>);
+			    }
 		    } else {
 			    console.error("I am not okay!");
 		    }
@@ -96,7 +117,9 @@ export default function DailyReport({ userId, assignUser }) {
             <label htmlFor="userId">Please enter the User ID:</label>
             <br />
             <input type="text" name="userId" onChange={handleChange} />
-            <br /><br />
+	    {errors.userId && <span className="error-message">{errors.userId}</span>}
+
+            <br />
           </div>
         )}
 
@@ -110,7 +133,7 @@ export default function DailyReport({ userId, assignUser }) {
           onChange={handleChange}
           placeholder="Eg: today OR March 4 2024"
         />
-        <br /><br />
+        <br />
         {errors.date && <span className="error-message">{errors.date}</span>}
 
         <div className="submit">
@@ -118,17 +141,7 @@ export default function DailyReport({ userId, assignUser }) {
         </div>
       </form>
 
-      {showReport ? (
-        <div>
-          <h1 className="report-title">{`Date: ${report.weekday}, ${report.date}`}</h1>
-          <p className="report-content">
-            Productive Time: <span className="green">{`${report.ttot_day}`} hour(s) </span>
-            <br /> Good Job! <br />
-            Wasted time: <span className="red">{`${report.twt_day}`} hour(s)</span><br />
-            Tomorrow is always another day. Salute!
-          </p>
-        </div>
-      ) : (<p> No report to show </p>)}
+      {message}
     </main>
   );
 }
