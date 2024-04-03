@@ -25,17 +25,20 @@ def daily_report():
         the Log object's "date" attribute '''
 
     date = request.form.get('date')
-    date = date.replace('-', '.')
-    date = date.replace(':', '.')
-    date = date.replace(',', '.')
-    date = date.replace(' ', '.')
+
+    # date = date.replace('-', '.')
+    # date = date.replace(':', '.')
+    # date = date.replace(',', '.')
+    # date = date.replace(' ', '.')
 
     ''' Handles the case of the user getting a report for "today" and not a
         specific date '''
 
     if date == "today":
         date = datetime.today().strftime("%B.%-d.%Y")
-
+    else:
+        date = datetime.strptime(date, "%Y-%m-%d").strftime("%B.%-d.%Y")
+    
     # Get all logs that are for the given date
     logs = storage.get_logs_of_the_day(date)
 
@@ -134,15 +137,16 @@ def weekly_report():
             date attribute
         '''
         custom_date = request.form.get('dateOfWeek')
-        custom_date = custom_date.replace(' ', '.')
-        custom_date = custom_date.replace('-', '.')
-        custom_date = custom_date.replace(',', '.')
-        custom_date = custom_date.replace(':', '.')
+        print(custom_date)
+        custom_date =  datetime.strptime(custom_date, "%Y-%m-%d")
+        # custom_date = custom_date.replace(' ', '.')
+        # custom_date = custom_date.replace('-', '.')
+        # custom_date = custom_date.replace(',', '.')
+        # custom_date = custom_date.replace(':', '.')
 
-        # Cnverts the string to an actual datetime object
-        date = datetime.strptime(custom_date, "%B.%d.%Y")
-        year = date.strftime("%Y")
-        return this_week(date)
+        # Converts the string to an actual datetime object
+        year = custom_date.strftime("%Y")
+        return this_week(custom_date)
     else:
         return jsonify({})
 

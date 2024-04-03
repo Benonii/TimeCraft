@@ -6,12 +6,7 @@ export default function DailyReport({ userId, assignUser }) {
     userId: "",
     date: " ",
   });
-  const [report, setReport] = useState({
-    weekday: "",
-    ttot_day: 0,
-    twt_day: 0,
-    date: "",
-  });
+
   const [errors, setErrors] = useState({}); // State for storing validation errors
   const [message, setMessage] = useState();
   const [showReport, setShowReport] = useState(false);
@@ -39,6 +34,15 @@ export default function DailyReport({ userId, assignUser }) {
           delete newErrors.userId;
         }
         break;
+      case "date":
+	if (value !== "today" && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+	  newErrors.date = (<p className="input-error"> Please match the format specified in the example
+		  	    </p>)
+	} else {
+	  delete newErrors.date;
+	}	
+        break;
+
       default:
         break;
     }
@@ -51,13 +55,23 @@ export default function DailyReport({ userId, assignUser }) {
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error("Please fix form errors before getting report:");
-      for (const error in errors) {
-        console.error("- " + errors[error]); // Log each specific error
-      }
+      setMessage((<p className="input-errors">Please fix form errors before getting report</p>));
       return; // Prevent form submission if errors exist
     }
 
+    // Check for empty submits
+    const emptyUserId = userId === "" ? validateInput('userId', formData.userId): 0;
+    const emptyDate = validateInput('date', formData.date);
+    
+    if (Object.keys(emptyUserId).length > 0) {
+      setMessage((<p className="input-errors"> User ID can not be emtpy</p>));
+      return; // Prevent form submission if errors exist
+    }
+
+    if (Object.keys(emptyDate).length > 0) {
+      setMessage((<p className="input-errors">Date can not be empty</p>));
+      return; // Prevent form submission if errors exist
+    }
     try {
 		    const params = new URLSearchParams();
 	    	    userId === ""
@@ -76,19 +90,17 @@ export default function DailyReport({ userId, assignUser }) {
 		    if (response.ok) {
 			    const reportJson =  await response.json();
 			    if (reportJson.date !== undefined) {
-			      setReport(reportJson)
-			      console.log(reportJson);
 			      setMessage(
 				      <div>
          	 			<h1 className="report-title">
-				      		{`Date: ${report.date}`}</h1>
+				      		{`Date: ${reportJson.date}`}</h1>
           				<p className="report-content">
             				Productive Time:
-				      <span className="green">{` ${report.ttot_day}`} hour(s)
+				      <span className="green">{` ${reportJson.ttot_day}`} hour(s)
 				      </span>
             				<br /> Good Job! <br />
             				Wasted time:
-				      <span className="red">{` ${report.twt_day}`} hour(s)</span>
+				      <span className="red">{` ${reportJson.twt_day}`} hour(s)</span>
 				      <br />
             				Tomorrow is always another day. Salute!
           				</p>
