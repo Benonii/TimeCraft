@@ -15,6 +15,10 @@
     margin-bottom: 80px;
 }
 
+.title:hover {
+	color: #000;
+}
+
 .intro {
     color: #333; /* Dark gray */
     font-size: 1.4rem;
@@ -45,7 +49,7 @@ input[type="text"] {
     height: 40px;
     margin-bottom: 10px;
     font-family: "Ojuju", sans-serif;
-    font-weight: 100;
+    font-weight: 370 !important;
     font-size: 1.2rem;
 }
 
@@ -59,12 +63,12 @@ input:focus {
     box-shadow: 0 0 20px lightgreen;
 }
 
-.submit {
+.user-submit {
 	display: flex;
 	justify-content: center;
 }
 
-button {
+.user-submit > button {
     border: 10px solid black;
     border-radius: 15px;
     background-color: green;
@@ -76,6 +80,23 @@ button {
 
 }
 
-button:hover {
-    background-color: #b37a00;
+.submit > button:hover {
+    background-color: green !important;
+    box-shadow: 0 0 10px green;
+}
+
+.submit > button:active {
+    padding: 12px 23px;
+    transition: .6;
+}
+
+.input-error {
+    color: red;
+    margin-top: 0px;
+    font-size: .9rem;
+}
+
+.input-errors {
+   color: red;
+   font-size: 1.3rem;
 }

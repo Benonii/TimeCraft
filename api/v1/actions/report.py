@@ -202,6 +202,9 @@ def total_productive_time():
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
 
+    if not user:
+        return jsonify({})
+
     # Dictionary to store the total productive time
     tpt = {'tpt': 0}
 
@@ -218,9 +221,11 @@ def total_wasted_time():
     user_id = request.form.get('userId')
     user = storage.get_user(user_id)
 
+    if not user:
+        return jsonify({})
+
     # Get a User's total wasted time and store it in a dictionary
     twt = {
             'twt': user.total_wasted_time
         }
-
     return jsonify(twt)

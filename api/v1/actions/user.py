@@ -44,7 +44,6 @@ def get_session_user():
 def switch_user():
     """ Changes the user for the session """
     user_id = request.json.get("userID")
-    print(user_id)
     user = storage.get_user(user_id)
 
     if user is None:

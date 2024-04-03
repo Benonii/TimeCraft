@@ -9,7 +9,6 @@ export default function DailyReport({ userId, assignUser }) {
 
   const [errors, setErrors] = useState({}); // State for storing validation errors
   const [message, setMessage] = useState();
-  const [showReport, setShowReport] = useState(false);
 
   function handleChange(e) {
     e.preventDefault(); // Prevent unnecessary default behavior
@@ -117,7 +116,6 @@ export default function DailyReport({ userId, assignUser }) {
 		} catch(error) {
 			console.error("Error submitting form:", error);
 		};
-    setShowReport(true);
   }
 
   return (
@@ -143,7 +141,7 @@ export default function DailyReport({ userId, assignUser }) {
           type="text"
           name="date"
           onChange={handleChange}
-          placeholder="Eg: today OR March 4 2024"
+          placeholder="Eg: today OR 2024-03-04"
         />
         <br />
         {errors.date && <span className="error-message">{errors.date}</span>}

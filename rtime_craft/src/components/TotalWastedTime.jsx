@@ -6,12 +6,8 @@ export default function TotalWastedTime({ userId, assignUser }) {
     userId: "",
   });
 
-  const [report, setReport] = useState({
-    twt: 0,
-  });
-
   const [errors, setErrors] = useState({}); // State to store validation errors
-  const [showReport, setShowReport] = useState(false);
+  const [message, setMessage] = useState();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -29,8 +25,9 @@ export default function TotalWastedTime({ userId, assignUser }) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "userId":
-        if (!value) {
-          newErrors.userId = "User ID cannot be empty.";
+        if (value.length !== 36) {
+          newErrors.userId = (<p className="input-error">User ID must be exactly 36 characters long
+			     </p>)
         } else {
           delete newErrors.userId;
         }
@@ -47,11 +44,15 @@ export default function TotalWastedTime({ userId, assignUser }) {
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error("Please fix form errors before getting report:");
-      for (const error in errors) {
-        console.error("- " + errors[error]); // Log each specific error
-      }
+      setMessage((<p className="input-errors">Please fix form errors before getting report.</p>));
       return; // Prevent form submission if errors exist
+    }
+
+	    // Check for empty submissions
+	    const emptyUserId = userId === "" ? validateInput('userId', formData.userId) : 0;
+	    if (Object.keys(emptyUserId).length > 0) {
+      setMessage((<p className="input-errors"> User ID can not be empty</p>))
+      return;
     }
 
     try {
@@ -71,16 +72,26 @@ export default function TotalWastedTime({ userId, assignUser }) {
       });
       if (response.ok) {
         const reportJson = await response.json();
-        setReport(reportJson);
-        console.log(reportJson);
+	if (reportJson.twt !== undefined) {
+          setMessage((
+	       	<div>
+          	    <h4 className="waste-report">
+            		So far, you have wasted <span className="wasted-time">
+              		{` ${reportJson.twt} `} hours.</span>
+            		<br />
+            		Remember, it's about progress, not perfection. Keep going!
+          	    </h4>
+        	</div>
+		))
+	} else {
+	  setMessage(<p> Could not find that user. Please check your ID and try again </p>);
+	}
       } else {
         console.error("I am not okay!");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-
-    setShowReport(true);
   }
 
   return (
@@ -104,17 +115,7 @@ export default function TotalWastedTime({ userId, assignUser }) {
         </div>
       </form>
 
-      {showReport && (
-        <div>
-          <h4 className="waste-report">
-            So far, you have wasted <span className="wasted-time">
-              {` ${report.twt} `} hours.
-            </span>
-            <br />
-            Remember, it's about progress, not perfection. Keep going!
-          </h4>
-        </div>
-      )}
+      {message}
     </div>
   );
 }

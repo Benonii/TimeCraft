@@ -7,12 +7,8 @@ export default function TotalProductiveTime({ userId, assignUser }) {
     date: "", // Removed as input for Total Productive Time might not require a specific date
   });
 
-  const [report, setReport] = useState({
-    tpt: 0,
-  });
-
   const [errors, setErrors] = useState({}); // State to store validation errors
-  const [showReport, setShowReport] = useState(false);
+  const [message, setMessage] = useState();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -20,6 +16,8 @@ export default function TotalProductiveTime({ userId, assignUser }) {
       ...prevState,
       [name]: value,
     }));
+
+    setMessage();
 
     // Perform basic validation on change (if applicable)
     const newErrors = validateInput(name, value);
@@ -30,8 +28,9 @@ export default function TotalProductiveTime({ userId, assignUser }) {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "userId":
-        if (!value) {
-          newErrors.userId = "User ID cannot be empty.";
+        if (value.length !== 36) {
+          newErrors.userId = (<p className='input-error'> User ID msut be exactly 36 characters long.
+		  		</p>);
         } else {
           delete newErrors.userId;
         }
@@ -48,11 +47,15 @@ export default function TotalProductiveTime({ userId, assignUser }) {
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error("Please fix form errors before getting report:");
-      for (const error in errors) {
-        console.error("- " + errors[error]); // Log each specific error
-      }
+      setMessage((<p className="input-errors">Please fix form errors before getting report:</p>));
       return; // Prevent form submission if errors exist
+    }
+
+    // Check for empty submission
+    const emptyUserId = userId === "" ? validateInput('userId', formData.userId) : 0;
+    if (Object.keys(emptyUserId).length > 0) {
+      setMessage((<p className="input-errors">User ID can not be empty </p>));
+      return;
     }
 
     try {
@@ -72,16 +75,25 @@ export default function TotalProductiveTime({ userId, assignUser }) {
       });
       if (response.ok) {
         const reportJson = await response.json();
-        setReport(reportJson);
-        console.log(reportJson);
+	if (reportJson.tpt !== undefined) {
+	  setMessage((
+		  <div>
+          		<h2 className="productive-time">
+            		So far, you have logged in {`${reportJson.tpt} `} hours of solid work.
+            		Keep it going!
+          		</h2>
+        	  </div>))
+	} else if (reportJson.tpt === 0) {
+	  setMessage((<p> It appears this user has not been very productive :(</p>))
+	} else {
+	  setMessage((<p>User not found. Please check your Id and try again </p>))
+	}
       } else {
         console.error("I am not okay!");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-
-    setShowReport(true);
   }
 
   return (
@@ -105,14 +117,7 @@ export default function TotalProductiveTime({ userId, assignUser }) {
         </div>
       </form>
 
-      {showReport && (
-        <div>
-          <h2 className="productive-time">
-            So far, you have logged in {`${report.tpt} `} hours of solid work.
-            Keep it going!
-          </h2>
-        </div>
-      )}
+      {message}
     </div>
   );
 }

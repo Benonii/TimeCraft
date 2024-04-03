@@ -41,7 +41,7 @@ export default function AssignUser({ assignUser }) {
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      setMessage(<p className="input-error"> Please fix form errors before submitting.</p>);
+      setMessage(<p className="input-errors"> Please fix form errors before submitting.</p>);
       return; // Prevent form submission if errors exist
     }
 

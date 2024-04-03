@@ -9,8 +9,7 @@ export default function NewTask({ userId, assignUser }) {
   });
 
   const [taskIsCreated, setTaskIsCreated] = useState(false);
-  const [message, setMessage] = useState();
-  const [taskId, setTaskId] = useState("");
+  const [message, setMessage] = useState()
   const [errors, setErrors] = useState({}); // State for storing validation errors
 
   function handleChange(e) {
@@ -61,7 +60,7 @@ export default function NewTask({ userId, assignUser }) {
     e.preventDefault();
 
     // Check for empty submits
-    const emptyUserId = userId === "" ? validateInput('userId', formData.userId) : null;
+    const emptyUserId = userId === "" ? validateInput('userId', formData.userId) : 0;
     const emptyTaskName = validateInput('taskName', formData.taskName);
     const emptyDailyGoal = validateInput('dailyGoal', formData.dailyGoal);
     // Check for any remaining errors before submission
@@ -107,11 +106,11 @@ export default function NewTask({ userId, assignUser }) {
 	if (response.ok) {
 		console.log('Form submitted successfully');
 		const taskJson = await response.json();
-
-		if (taskJson !== {}) { 
-		  setTaskId(taskJson.task_id);
+		console.log(taskJson);
+		if (taskJson.task_id !== undefined) { 
 		  setMessage((<p>
-			  The task is saved. Your Task ID is {`${taskId}`}. Keep it safe
+			  The task is saved. Your Task ID is {`${taskJson.task_id}`}. Keep it safe
+
 			  </p>));
 		} else {
 		  setMessage((<p> Task creation failed. Try again </p>));
