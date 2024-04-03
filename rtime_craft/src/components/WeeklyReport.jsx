@@ -37,7 +37,7 @@ export default function WeeklyReport({ userId, assignUser }) {
         }
         break;
       case "dateOfWeek":
-        if (isCustom && !value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        if ((isCustom && !value) || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
           newErrors.dateOfWeek = (<p className="input-error">
 		  Invalid date format. Use YYYY-MM-DD (e.g., 2024-03-19).</p>)
         } else {

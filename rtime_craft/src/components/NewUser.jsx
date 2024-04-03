@@ -94,7 +94,7 @@ export default function NewUser ({ assignUser }) {
 	  setMessage((
 		  <p>
 		    User created successfully.<br /> 
-		    Here is the User id: {responseJSON.user_id}<br />
+		    Here is the User id: <b>{responseJSON.user_id}</b><br />
 		    Keep it safe, you might need it later.
 		  </p>
 	  ));

@@ -6,13 +6,8 @@ export default function TotalTimeOnTask() {
     taskId: "",
   });
 
-  const [report, setReport] = useState({
-    ttot: 0,
-    taskName: ""
-  });
-
   const [errors, setErrors] = useState({}); // State to store validation errors
-  const [showReport, setShowReport] = useState(false);
+  const [message, setMessage] = useState();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -30,8 +25,8 @@ export default function TotalTimeOnTask() {
     const newErrors = { ...errors }; // Copy existing errors
     switch (name) {
       case "taskId":
-        if (!value) {
-          newErrors.taskId = "Task ID cannot be empty.";
+        if (value.length !== 36) {
+          newErrors.taskId = (<p className="input-error">Task ID must be exactly 36 characters long.</p>);
         } else {
           delete newErrors.taskId;
         }
@@ -48,12 +43,16 @@ export default function TotalTimeOnTask() {
     // Check for any remaining errors before submission
     const hasErrors = Object.keys(errors).length > 0;
     if (hasErrors) {
-      console.error("Please fix form errors before getting report:");
-      for (const error in errors) {
-        console.error("- " + errors[error]); // Log each specific error
-      }
+      setMessage((<p className="input-errors">Please fix form errors before getting report.</p>));
       return; // Prevent form submission if errors exist
     }
+
+   // Check for empty submissions
+   const emptyTaskId = validateInput('taskId', formData.taskId);
+   if (Object.keys(emptyTaskId).length > 0) {
+     setMessage((<p className="input-errors">User ID can not be empty</p>));
+     return;
+  }
 
     try {
       const params = new URLSearchParams();
@@ -67,16 +66,22 @@ export default function TotalTimeOnTask() {
       });
       if (response.ok) {
         const reportJson = await response.json();
-        setReport(reportJson);
-        console.log(reportJson);
+	if (reportJson.ttot !== undefined) {
+	  setMessage((
+		<h1 className="task-time">
+          	So far, you have spent {`${reportJson.ttot}`} hours on {`${reportJson.taskName}`}.
+		Way to go!
+        	</h1>
+	  ))
+	} else {
+	  setMessage((<p> Could not find that task. Please check your ID and try again </p>))
+	}
       } else {
         console.error("I am not okay!");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-
-    setShowReport(true);
   }
 
   return (
@@ -95,11 +100,7 @@ export default function TotalTimeOnTask() {
         </div>
       </form>
 
-      {showReport && (
-        <h1 className="task-time">
-          So far, you have spent {`${report.ttot}`} hours on {`${report.taskName}`}. Way to go
-        </h1>
-      )}
+      {message}
     </main>
   );
 }
