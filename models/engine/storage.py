@@ -26,7 +26,7 @@ class Storage:
 
         # We are using the dev database
         self.__engine = create_engine('mysql+mysqldb:'
-                                      + '//tc_dev:<your_database_password>@localhost'
+                                      + '//tc_dev:tc_dev_pwd_4796@localhost'
                                       + '/tc_dev_db')
 
     def all_tasks(self, usr):
